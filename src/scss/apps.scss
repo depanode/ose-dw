@@ -4,7 +4,6 @@
     text-align: center;
   }
 }
-
 .ose.dialog.creator {
   .attribute-list {
     .form-fields {
@@ -31,7 +30,6 @@
     }
   }
 }
-
 .ose.dialog.gp-cost {
   .item-list {
     margin: 0;
@@ -62,7 +60,6 @@
     }
   }
 }
-
 .ose.dialog.party-xp {
   .actors {
     max-height: 250px;
@@ -94,7 +91,6 @@
     }
   }
 }
-
 .ose.dialog.party-sheet {
   min-width: 250px;
   min-height: 250px;
@@ -127,21 +123,18 @@
     width: 100%;
     flex-grow: 1;
   }
-
   .drag-drop-placeholder {
     width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-
     p {
       text-align: center;
       width: 90%;
       color: $colorTan;
     }
   }
-
   .actor-list {
     margin: 0;
     overflow: auto;
@@ -206,7 +199,6 @@
     text-indent: 5px;
   }
 }
-
 #sidebar #actors .directory-header .header-search {
   .ose-party-sheet {
     width: 32px;
@@ -217,7 +209,6 @@
     width: calc(100% - 45px);
   }
 }
-
 .ose.dialog.modifiers {
   .attribute-bonuses {
     label {
@@ -228,7 +219,6 @@
     }
   }
 }
-
 .sheet.roll-table-config {
   .sheet-header {
     .toggle-treasure {
@@ -264,13 +254,11 @@
     }
   }
 }
-
 #settings .ose.game-license {
   font-size: var(--font-size-12);
   padding: 10px;
   flex-basis: 100%;
 }
-
 .ose.chat-block {
   margin: 0;
   .chat-header {
@@ -346,22 +334,18 @@
     }
   }
 }
-
 .ose.chat-card {
   font-style: normal;
   font-size: 12px;
-
   .card-header {
     padding: 3px 0;
     border-top: 2px groove #fff;
     border-bottom: 2px groove #fff;
-
     img {
       flex: 0 0 36px;
       margin-right: 5px;
       border: none;
     }
-
     h3 {
       flex: 1;
       margin: 0;
@@ -372,7 +356,6 @@
       }
     }
   }
-
   .inventory-list {
     .item-category-title {
       line-height: 30px;
@@ -409,7 +392,6 @@
       }
     }
   }
-
   .card-content {
     margin: 5px 0;
     .treasure-list {
@@ -445,7 +427,6 @@
       margin: 0;
       font-weight: bold;
     }
-
     > * {
       -webkit-user-select: text;
       -moz-user-select: text;
@@ -453,17 +434,14 @@
       user-select: text;
     }
   }
-
   .card-buttons {
     margin: 5px 0;
-
     span {
       display: block;
       line-height: 28px;
       text-align: center;
       border: 1px solid $colorTan;
     }
-
     button {
       font-size: 12px;
       height: 24px;
@@ -471,16 +449,13 @@
       margin: 2px 0;
     }
   }
-
   .card-footer {
     padding: 3px 0 0;
     border-top: 2px groove #fff;
-
     span {
       border-right: 2px groove #fff;
       padding: 0 5px 0 0;
       font-size: 10px;
-
       &:last-child {
         border-right: none;
         padding-right: 0;
@@ -488,7 +463,6 @@
     }
   }
 }
-
 .dice-roll .dice-total {
   &.success {
     color: inherit;
@@ -507,7 +481,6 @@
     color: red;
   }
 }
-
 .app .compendium .directory-item {
   position: relative;
   .tag-list {
@@ -534,7 +507,6 @@
     }
   }
 }
-
 .sidebar-tab.directory .directory-list {
   .directory-item {
     position: relative;

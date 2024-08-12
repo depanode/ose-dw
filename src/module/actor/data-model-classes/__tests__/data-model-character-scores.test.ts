@@ -3,12 +3,10 @@
  */
 import { QuenchMethods } from "../../../../e2e";
 import OseDataModelCharacterScores from "../data-model-character-scores";
-
 export const key = "ose.actor.datamodel.character.scores";
 export const options = {
   displayName: "OSE: Actor: Data Model: Character Ability Scores",
 };
-
 export default ({ describe, it, expect }: QuenchMethods) => {
   // An array from 0-
   const scoreSpread = Array.from({ length: 21 }, (_el, idx) => idx);
@@ -26,7 +24,6 @@ export default ({ describe, it, expect }: QuenchMethods) => {
     Object.fromEntries(
       scoreKeys.map((scoreKey) => [scoreKey, { value: number, bonus: 0 }])
     );
-
   const buildTestCases = (
     score: number,
     scoreKey: string,
@@ -55,32 +52,26 @@ export default ({ describe, it, expect }: QuenchMethods) => {
       );
     });
   };
-
   const spreadToModTests = (name: string) =>
     scoreKeys.map((scoreKey) =>
       describe(`${name}: ${scoreKey}`, () =>
         scoreSpread.map((score) => buildTestCases(score, scoreKey, "mod", 0)))
     );
-
   describe("Standard attribute modifiers", () => spreadToModTests("Attribute"));
-
   describe("Strength modifiers", () => {
     describe("Open Doors", () =>
       scoreSpread.map((score) => buildTestCases(score, "str", "od", 2)));
   });
-
   describe("Intelligence modifiers", () => {
     describe("Literacy", () =>
       scoreSpread.map((score) => buildTestCases(score, "int", "literacy", 3)));
     describe("Spoken Languages", () =>
       scoreSpread.map((score) => buildTestCases(score, "int", "spoken", 4)));
   });
-
   describe("Dexterity modifiers", () => {
     describe("Initiative", () =>
       scoreSpread.map((score) => buildTestCases(score, "dex", "init", 1)));
   });
-
   describe("Charisma modifiers", () => {
     describe("NPC Reaction", () =>
       scoreSpread.map((score) => buildTestCases(score, "cha", "npc", 1)));

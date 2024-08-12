@@ -3,13 +3,11 @@
  */
 // eslint-disable-next-line no-unused-vars
 import OSE from "../config";
-
 export default class OseCharacterGpCost extends FormApplication {
   constructor(event, preparedData, position) {
     super(event, position);
     this.object.preparedData = preparedData;
   }
-
   static get defaultOptions() {
     const options = super.defaultOptions;
     options.classes = ["ose", "dialog", "gp-cost"];
@@ -18,9 +16,7 @@ export default class OseCharacterGpCost extends FormApplication {
     options.width = 240;
     return options;
   }
-
   /* -------------------------------------------- */
-
   /**
    * Add the Entity name into the window title
    *
@@ -32,9 +28,7 @@ export default class OseCharacterGpCost extends FormApplication {
       "OSE.dialog.shoppingCart"
     )}`;
   }
-
   /* -------------------------------------------- */
-
   /**
    * Construct and return the data object used to render the HTML template for this form application.
    *
@@ -47,11 +41,9 @@ export default class OseCharacterGpCost extends FormApplication {
     this.inventory = this.object.items;
     return data;
   }
-
   async close(options) {
     return super.close(options);
   }
-
   /**
    * An object that provides options to _onSubmit
    *
@@ -59,7 +51,6 @@ export default class OseCharacterGpCost extends FormApplication {
    * @property {boolean} preventClose - Should the application be stopped from closing?
    * @property {boolean} preventRender - Should the application be stopped from rendering?
    */
-
   /**
    * Override Foundry's default _onSubmit event to add our own behaviors
    *
@@ -96,7 +87,6 @@ export default class OseCharacterGpCost extends FormApplication {
       ui.notifications.error(game.i18n.localize("OSE.error.notEnoughGP"));
     }
   }
-
   /**
    * This method is called upon form submission after form data is validated
    *
@@ -106,7 +96,6 @@ export default class OseCharacterGpCost extends FormApplication {
    */
   async #updateObject(event, formData) {
     event.preventDefault();
-
     const speaker = ChatMessage.getSpeaker({ actor: this });
     const templateData = await this.getData();
     const content = await renderTemplate(
@@ -119,11 +108,9 @@ export default class OseCharacterGpCost extends FormApplication {
     });
     // Update the actor
     await this.object.update(formData);
-
     // Re-draw the updated sheet
     this.object.sheet.render(true);
   }
-
   // eslint-disable-next-line class-methods-use-this
   async #getTotalCost(data) {
     let total = 0;
@@ -137,9 +124,7 @@ export default class OseCharacterGpCost extends FormApplication {
     });
     return total;
   }
-
   /* -------------------------------------------- */
-
   /** @override */
   activateListeners(html) {
     super.activateListeners(html);

@@ -10,15 +10,12 @@ import {
   waitForInput,
 } from "../../../e2e/testUtils";
 import OseEntityTweaks from "../entity-tweaks";
-
 export const key = "ose.actor.sheet.dialog.entity-tweaks";
 export const options = {
   displayName: "OSE: Actor: Dialog Sheet: Entity Tweaks",
 };
-
 const createMockActor = async (type: string, data: object = {}) =>
   createMockActorKey(type, data, key);
-
 export default ({ describe, it, expect, assert, after }: QuenchMethods) => {
   describe("defaultOptions()", () => {
     it("Has correctly set defaultOptions", () => {
@@ -31,7 +28,6 @@ export default ({ describe, it, expect, assert, after }: QuenchMethods) => {
       expect(entityTweaks.options.width).equal(380);
     });
   });
-
   describe("title()", () => {
     it("Creates string in dialog window title", async () => {
       const actor = await createMockActor("character");
@@ -48,7 +44,6 @@ export default ({ describe, it, expect, assert, after }: QuenchMethods) => {
       expect(openWindows("sheet-tweaks").length).equal(0);
     });
   });
-
   describe("getData()", () => {
     it("Returns proper data", async () => {
       const actor = await createMockActor("character");
@@ -61,10 +56,8 @@ export default ({ describe, it, expect, assert, after }: QuenchMethods) => {
       assert(data.isCharacter);
     });
   });
-
   // @todo: Test with Cypress or mock event
   describe("_updateObject(event, formData)", () => {});
-
   after(async () => {
     await cleanUpActorsByKey(key);
   });

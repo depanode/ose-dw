@@ -4,9 +4,7 @@
 import OseDataModelCharacterEncumbrance, {
   CharacterEncumbrance,
 } from "./data-model-character-encumbrance";
-
 // import { OSE } from '../../config';
-
 /**
  * @todo Add template path for encumbrance bar
  * @todo Add template path for inventory item row
@@ -16,21 +14,16 @@ export default class OseDataModelCharacterEncumbranceComplete
   implements CharacterEncumbrance
 {
   static templateEncumbranceBar = "";
-
   static templateInventoryRow = "";
-
   /**
    * The machine-readable label for this encumbrance scheme
    */
   static type = "complete";
-
   /**
    * The human-readable label for this encumbrance scheme
    */
   static localizedLabel = "OSE.Setting.EncumbranceComplete";
-
   #weight;
-
   constructor(
     max = OseDataModelCharacterEncumbrance.baseEncumbranceCap,
     items: Item[] = []
@@ -46,12 +39,10 @@ export default class OseDataModelCharacterEncumbranceComplete
       0
     );
   }
-
   // eslint-disable-next-line class-methods-use-this
   get steps() {
     return Object.values(OseDataModelCharacterEncumbrance.encumbranceSteps);
   }
-
   get value(): number {
     return this.#weight;
   }

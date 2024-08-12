@@ -52,7 +52,6 @@ import actorSheetMonsterTests, {
   key as actorSheetMonsterKey,
   options as actorSheetMonsterOptions,
 } from "../module/actor/__tests__/sheet-monster.test";
-
 // DIALOG TESTING IMPORTS
 import actorSheetCharacterDialogModifiersTest, {
   key as actorSheetCharacterDialogModifiersKey,
@@ -62,7 +61,6 @@ import actorSheetDialogEntityTweaksTests, {
   key as actorSheetDialogEntityTweaksKey,
   options as actorSheetDialogEntityTweaksOptions,
 } from "../module/dialog/__tests__/sheet-entity-tweaks.test";
-
 // ITEM TESTING IMPORTS
 import itemDataModelAbilityTests, {
   key as itemDataModelAbilityKey,
@@ -96,7 +94,6 @@ import itemSheetTests, {
   key as itemSheetKey,
   options as itemSheetOptions,
 } from "../module/item/__tests__/sheet-item.test";
-
 // PARTY TESTING IMPORTS
 import partyEntityTests, {
   key as partyEntityKey,
@@ -110,7 +107,6 @@ import partyXpSheetTests, {
   key as partyXpSheetKey,
   options as partyXpSheetOptions,
 } from "../module/party/__tests__/sheet-party-xp.test";
-
 // HELPER TESTING IMPORTS
 import helpersBehaviourTests, {
   key as helpersBehaviourKey,
@@ -140,15 +136,12 @@ import helpersTreasureTests, {
   key as helpersTreasureKey,
   options as helpersTreasureOptions,
 } from "../module/__tests__/helpers-treasure.test";
-
 export type QuenchMethods = {
   [s: string]: any;
 };
-
 type Quench = {
   registerBatch: (key: string, tests: Function, options: any) => void;
 };
-
 Hooks.on("quenchReady", async (quench: Quench) => {
   /* ------------------------------------------- */
   /* ACTOR TESTING                               */
@@ -188,9 +181,7 @@ Hooks.on("quenchReady", async (quench: Quench) => {
     actorDataModelMonsterTests,
     actorDataModelMonsterOptions
   );
-
   quench.registerBatch(actorEntityKey, actorEntityTests, actorEntityOptions);
-
   quench.registerBatch(actorSheetKey, actorSheetTests, actorSheetOptions);
   quench.registerBatch(
     actorSheetDragNDropKey,
@@ -207,11 +198,9 @@ Hooks.on("quenchReady", async (quench: Quench) => {
     actorSheetMonsterTests,
     actorSheetMonsterOptions
   );
-
   /* ------------------------------------------- */
   /* DIALOG TESTING                              */
   /* ------------------------------------------- */
-
   quench.registerBatch(
     actorSheetCharacterDialogModifiersKey,
     actorSheetCharacterDialogModifiersTest,
@@ -222,11 +211,9 @@ Hooks.on("quenchReady", async (quench: Quench) => {
     actorSheetDialogEntityTweaksTests,
     actorSheetDialogEntityTweaksOptions
   );
-
   /* ------------------------------------------- */
   /* ITEM TESTING                                */
   /* ------------------------------------------- */
-
   quench.registerBatch(
     itemDataModelAbilityKey,
     itemDataModelAbilityTests,
@@ -257,23 +244,17 @@ Hooks.on("quenchReady", async (quench: Quench) => {
     itemDataModelWeaponTests,
     itemDataModelWeaponOptions
   );
-
   quench.registerBatch(itemEntityKey, itemEntityTests, itemEntityOptions);
-
   quench.registerBatch(itemSheetKey, itemSheetTests, itemSheetOptions);
-
   /* ------------------------------------------- */
   /* PARTY TESTING                         */
   /* ------------------------------------------- */
-
   quench.registerBatch(partyEntityKey, partyEntityTests, partyEntityOptions);
   quench.registerBatch(partySheetKey, partySheetTests, partySheetOptions);
   quench.registerBatch(partyXpSheetKey, partyXpSheetTests, partyXpSheetOptions);
-
   /* ------------------------------------------- */
   /* HELPER TESTING                               */
   /* ------------------------------------------- */
-
   quench.registerBatch(
     helpersBehaviourKey,
     helpersBehaviourTests,

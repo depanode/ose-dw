@@ -3,7 +3,6 @@
  */
 import OSE from "../config";
 import OseDice from "../helpers-dice";
-
 export default class OseCharacterCreator extends FormApplication {
   static get defaultOptions() {
     const options = super.defaultOptions;
@@ -14,9 +13,7 @@ export default class OseCharacterCreator extends FormApplication {
     options.submitOnClose = false;
     return options;
   }
-
   /* -------------------------------------------- */
-
   /**
    * Add the Entity name into the window title
    *
@@ -25,9 +22,7 @@ export default class OseCharacterCreator extends FormApplication {
   get title() {
     return `${this.object.name}: ${game.i18n.localize("OSE.dialog.generator")}`;
   }
-
   /* -------------------------------------------- */
-
   /**
    * Construct and return the data object used to render the HTML template for this form application.
    *
@@ -55,9 +50,7 @@ export default class OseCharacterCreator extends FormApplication {
     this.gold = 0;
     return data;
   }
-
   /* -------------------------------------------- */
-
   doStats(ev) {
     const list = $(ev.currentTarget).closest(".attribute-list");
     const scores = Object.values(this.scores);
@@ -69,30 +62,25 @@ export default class OseCharacterCreator extends FormApplication {
         .map((x) => (x.value - mean) ** 2)
         .reduce((acc, next) => acc + next, 0) / n
     );
-
     const stats = list.siblings(".roll-stats");
     stats.find(".sum").text(sum);
     stats.find(".avg").text(Math.round((10 * sum) / n) / 10);
     stats.find(".std").text(Math.round(100 * std) / 100);
-
     if (n >= 6) {
       $(ev.currentTarget)
         .closest("form")
         .find('button[type="submit"]')
         .removeAttr("disabled");
     }
-
     this.object.stats = {
       sum,
       avg: Math.round((10 * sum) / n) / 10,
       std: Math.round(100 * std) / 100,
     };
   }
-
-  async rollScore(score, options = {}) {
+  rollScore(score, options = {}) {
     // Increase counter
     this.counters[score] += 1;
-
     const label =
       score === "gold"
         ? "Gold"
@@ -102,8 +90,7 @@ export default class OseCharacterCreator extends FormApplication {
       roll: {},
     };
     if (options.skipMessage) {
-      const skipMessagRoll = new Roll(rollParts[0]);
-      await skipMessagRoll.evaluate();
+      return new Roll(rollParts[0]).evaluate({ async: false });
     }
     // Roll and return
     return OseDice.Roll({
@@ -122,7 +109,6 @@ export default class OseCharacterCreator extends FormApplication {
       }),
     });
   }
-
   /** @override */
   activateListeners(html) {
     super.activateListeners(html);
@@ -134,7 +120,6 @@ export default class OseCharacterCreator extends FormApplication {
         $(el).find("input").val(r.total).trigger("change");
       });
     });
-
     html.find("a.gold-roll").click((ev) => {
       const el = ev.currentTarget.parentElement.parentElement.parentElement;
       this.rollScore("gold", { event: ev }).then((r) => {
@@ -142,11 +127,9 @@ export default class OseCharacterCreator extends FormApplication {
         $(el).find(".gold-value").val(this.gold);
       });
     });
-
     html.find("input.score-value").change((ev) => {
       this.doStats(ev);
     });
-
     html.find("a.auto-roll").click(async (ev) => {
       const stats = ["str", "int", "dex", "wis", "con", "cha"];
       for (const char of stats) {
@@ -159,7 +142,6 @@ export default class OseCharacterCreator extends FormApplication {
       this.submit();
     });
   }
-
   // eslint-disable-next-line no-underscore-dangle
   async _onSubmit(
     event,
@@ -172,7 +154,6 @@ export default class OseCharacterCreator extends FormApplication {
       preventClose,
       preventRender,
     });
-
     // Gather scores
     const speaker = ChatMessage.getSpeaker({ actor: this.object.actor });
     const templateData = {
@@ -186,12 +167,10 @@ export default class OseCharacterCreator extends FormApplication {
       `${OSE.systemPath()}/templates/chat/roll-creation.html`,
       templateData
     );
-
     await ChatMessage.create({
       content,
       speaker,
     });
-
     // Generate gold
     const itemData = {
       name: game.i18n.localize("OSE.items.gp.short"),
@@ -208,7 +187,6 @@ export default class OseCharacterCreator extends FormApplication {
     };
     this.object.createEmbeddedDocuments("Item", [itemData]);
   }
-
   /**
    * This method is called upon form submission after form data is validated
    *
@@ -221,7 +199,6 @@ export default class OseCharacterCreator extends FormApplication {
     event.preventDefault();
     // Update the actor
     await this.object.update(formData);
-
     // Re-draw the updated sheet
     this.object.sheet.render(true);
   }

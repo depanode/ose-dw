@@ -3,50 +3,57 @@
     <label for="spellcaster">{{localize "OSE.Spellcaster"}}</label>
     <div class="form-fields">
       <input type="checkbox" name="system.spells.enabled" id="spellcaster" {{checked @root.system.spells.enabled}}
-        data-dtype="Boolean" />
+             data-dtype="Boolean" />
     </div>
   </div>
   <div class="form-group">
     <label for="retainer">{{localize "OSE.Retainer"}}</label>
     <div class="form-fields">
       <input type="checkbox" name="system.retainer.enabled" id="retainer" {{checked @root.system.retainer.enabled}}
-        data-dtype="Boolean" />
+             data-dtype="Boolean" />
     </div>
   </div>
   <div class="form-group">
     <label for="retainer">{{localize "OSE.Tweaks.DontApplyWeaponBonusToDamageRoll"}}</label>
     <div class="form-fields">
       <input type="checkbox" name="system.config.ignoreBonusDamage" id="ignoreBonusDamage" {{checked system.config.ignoreBonusDamage}}
-        data-dtype="Boolean" />
+             data-dtype="Boolean" />
     </div>
   </div>
   <div class="form-group">
     <label>{{localize "OSE.InitiativeBonus"}}</label>
     <div class="form-fields">
       <input type="text" name="system.initiative.mod" id="initiative" value="{{@root.system.initiative.mod}}"
-        data-dtype="Number" />
+             data-dtype="Number" />
     </div>
   </div>
   {{#if (eq this.type 'character')}}
   <div class="form-group">
+    <label>{{localize "OSE.saves.magic.long"}}</label>
+    <div class="form-fields">
+      <input type="text" name="system.saves.magicBonus.value" id="magicBonus" value="{{@root.system.saves.magicBonus.value}}"
+             data-dtype="Number" />
+    </div>
+  </div>
+  <div class="form-group">
     <label>{{localize "OSE.details.experience.next"}}</label>
     <div class="form-fields">
       <input type="text" name="system.details.xp.next" id="experiencenext" value="{{@root.system.details.xp.next}}"
-        data-dtype="Number" />
+             data-dtype="Number" />
     </div>
   </div>
   <div class="form-group">
     <label>{{localize "OSE.details.experience.bonus"}} (%)</label>
     <div class="form-fields">
       <input type="text" name="system.details.xp.bonus" id="experience" value="{{@root.system.details.xp.bonus}}"
-        data-dtype="Number" />
+             data-dtype="Number" />
     </div>
   </div>
   <div class="form-group">
     <label>{{localize "OSE.details.experience.share"}} (%)</label>
     <div class="form-fields">
       <input type="text" name="system.details.xp.share" id="experience-share" value="{{@root.system.details.xp.share}}"
-        data-dtype="Number" />
+             data-dtype="Number" />
     </div>
   </div>
   <div class="form-group">
@@ -59,7 +66,7 @@
     <label>{{localize "OSE.MissileBonus"}}</label>
     <div class="form-fields">
       <input type="text" name="system.thac0.mod.missile" id="missile" value="{{@root.system.thac0.mod.missile}}"
-        data-dtype="Number" />
+             data-dtype="Number" />
     </div>
   </div>
   <div class="form-group">
@@ -76,14 +83,14 @@
     <label>{{localize "OSE.Encumbrance"}}</label>
     <div class="form-fields">
       <input type="text" name="system.encumbrance.max" id="encumbrance" value="{{@root.system.encumbrance.max}}"
-        data-dtype="Number" {{#unless user.isGM}}disabled{{/unless}} />
+             data-dtype="Number" {{#unless user.isGM}}disabled{{/unless}} />
     </div>
   </div>
   <div class="form-group">
     <label for="movementAuto">{{localize "OSE.Setting.MovementAuto"}}</label>
     <div class="form-fields">
       <input type="checkbox" name="system.config.movementAuto" id="movementAuto" {{checked system.config.movementAuto}}
-        data-dtype="Boolean" {{#unless user.isGM}}disabled{{/unless}} />
+             data-dtype="Boolean" {{#unless user.isGM}}disabled{{/unless}} />
     </div>
   </div>
   {{else}}
@@ -91,7 +98,7 @@
     <label for="enableInventory">{{localize "OSE.Setting.EnableInventory"}}</label>
     <div class="form-fields">
       <input type="checkbox" name="system.config.enableInventory" id="enableInventory" {{checked system.config.enableInventory}}
-        data-dtype="Boolean" {{#unless user.isGM}}disabled{{/unless}} />
+             data-dtype="Boolean" {{#unless user.isGM}}disabled{{/unless}} />
     </div>
   </div>
   {{/if}}

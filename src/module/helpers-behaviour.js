@@ -1,7 +1,6 @@
 /**
  * @file Contains helpers for various behaviors
  */
-
 /**
  * Checks if dialogs should be skipped, depending on settings
  *
@@ -17,5 +16,4 @@ const skipRollDialogCheck = (event) => {
     ? !(event && (event.ctrlKey || event.metaKey))
     : event && (event.ctrlKey || event.metaKey);
 };
-
 export default skipRollDialogCheck;

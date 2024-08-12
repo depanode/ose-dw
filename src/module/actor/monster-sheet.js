@@ -3,7 +3,6 @@
  */
 import OSE from "../config";
 import OseActorSheet from "./actor-sheet";
-
 /**
  * Extend the basic ActorSheet with some very simple modifications
  */
@@ -29,7 +28,6 @@ export default class OseActorSheetMonster extends OseActorSheet {
       ],
     });
   }
-
   /**
    * Organize and classify Owned Items for Character sheets
    *
@@ -45,11 +43,9 @@ export default class OseActorSheetMonster extends OseActorSheet {
       armors: this.actor.system.armor,
       treasures: this.actor.system.treasures,
     };
-
     data.attackPatterns = this.actor.system.attackPatterns;
     data.spells = this.actor.system.spells.spellList;
   }
-
   /**
    * Prepare data for rendering the Actor sheet
    * The prepared data object contains both the actor data as well as additional sheet options
@@ -58,9 +54,7 @@ export default class OseActorSheetMonster extends OseActorSheet {
     const data = super.getData();
     // Prepare owned items
     this._prepareItems(data);
-
     const monsterData = data?.system;
-
     // Settings
     data.config.morale = game.settings.get(game.system.id, "morale");
     monsterData.details.treasure.link = await TextEditor.enrichHTML(
@@ -68,8 +62,7 @@ export default class OseActorSheetMonster extends OseActorSheet {
       { async: true }
     );
     data.isNew = this.actor.isNew();
-
-    if (foundry.utils.isNewerVersion(game.version, "10.264")) {
+    if (isNewerVersion(game.version, "10.264")) {
       data.enrichedBiography = await TextEditor.enrichHTML(
         this.object.system.details.biography,
         { async: true }
@@ -77,13 +70,11 @@ export default class OseActorSheetMonster extends OseActorSheet {
     }
     return data;
   }
-
   /**
    * Monster creation helpers
    */
   async generateSave() {
     const choices = CONFIG.OSE.monster_saves;
-
     const templateData = { choices };
     const dlg = await renderTemplate(
       `${OSE.systemPath()}/templates/actors/dialogs/monster-saves.html`,
@@ -115,7 +106,6 @@ export default class OseActorSheetMonster extends OseActorSheet {
       }
     ).render(true);
   }
-
   async _onDrop(event) {
     super._onDrop(event);
     let data;
@@ -125,7 +115,6 @@ export default class OseActorSheetMonster extends OseActorSheet {
     } catch (error) {
       return false;
     }
-
     let link = "";
     if (data.pack) {
       const tableDatum = game.packs
@@ -137,7 +126,6 @@ export default class OseActorSheetMonster extends OseActorSheet {
     }
     this.actor.update({ "system.details.treasure.table": link });
   }
-
   /* -------------------------------------------- */
   async _resetAttacks(event) {
     return Promise.all(
@@ -150,11 +138,9 @@ export default class OseActorSheetMonster extends OseActorSheet {
         )
     );
   }
-
   async _updateAttackCounter(event) {
     event.preventDefault();
     const item = this._getItemFromActor(event);
-
     if (event.target.dataset.field === "value") {
       return item.update({
         "system.counter.value": parseInt(event.target.value),
@@ -166,7 +152,6 @@ export default class OseActorSheetMonster extends OseActorSheet {
       });
     }
   }
-
   _cycleAttackPatterns(event) {
     const item = super._getItemFromActor(event);
     const currentColor = item.system.pattern;
@@ -183,7 +168,6 @@ export default class OseActorSheetMonster extends OseActorSheet {
       "system.pattern": colors[index],
     });
   }
-
   /**
    * Activate event listeners using the prepared sheet HTML
    *
@@ -191,45 +175,35 @@ export default class OseActorSheetMonster extends OseActorSheet {
    */
   activateListeners(html) {
     super.activateListeners(html);
-
     html.find(".morale-check a").click((ev) => {
       const actorObject = this.actor;
       actorObject.rollMorale({ event: ev });
     });
-
     html.find(".reaction-check a").click((ev) => {
       const actorObject = this.actor;
       actorObject.rollReaction({ event: ev });
     });
-
     html.find(".appearing-check a").click((ev) => {
       const actorObject = this.actor;
       const check = $(ev.currentTarget).closest(".check-field").data("check");
       actorObject.rollAppearing({ event: ev, check });
     });
-
     html.find(".treasure-table a").contextmenu((ev) => {
       this.actor.update({ "system.details.treasure.table": null });
     });
-
     // Everything below here is only needed if the sheet is editable
     if (!this.options.editable) return;
-
     html.find(".item-reset[data-action='reset-attacks']").click((ev) => {
       this._resetAttacks(ev);
     });
-
     html
       .find(".counter input")
       .click((ev) => ev.target.select())
       .change(this._updateAttackCounter.bind(this));
-
     html.find(".hp-roll").click((ev) => {
       this.actor.rollHP({ event: ev });
     });
-
     html.find(".item-pattern").click((ev) => this._cycleAttackPatterns(ev));
-
     html
       .find('button[data-action="generate-saves"]')
       .click(() => this.generateSave());

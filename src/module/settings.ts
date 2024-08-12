@@ -1,14 +1,19 @@
 /**
  * @file Wire up system settings.
  */
-
-import { ApplyDamageOption } from "./config";
-import { EncumbranceOption } from "./config";
-
+import { ApplyDamageOption, EncumbranceOption } from "./config";
 /**
  * Perform setting registration.
  */
 const registerSettings = () => {
+  game.settings.register(game.system.id, "dolmenwood", {
+    name: game.i18n.localize("OSE.Setting.Dolmenwood"),
+    hint: game.i18n.localize("OSE.Setting.DolmenwoodHint"),
+    default: true,
+    scope: "world",
+    type: Boolean,
+    config: true,
+  });
   game.settings.register(game.system.id, "initiative", {
     name: game.i18n.localize("OSE.Setting.Initiative"),
     hint: game.i18n.localize("OSE.Setting.InitiativeHint"),
@@ -21,7 +26,6 @@ const registerSettings = () => {
       group: "OSE.Setting.InitiativeGroup",
     },
   });
-
   game.settings.register(game.system.id, "rerollInitiative", {
     name: game.i18n.localize("OSE.Setting.RerollInitiative"),
     hint: game.i18n.localize("OSE.Setting.RerollInitiativeHint"),
@@ -35,7 +39,6 @@ const registerSettings = () => {
       reroll: "OSE.Setting.InitiativeReroll",
     },
   });
-
   game.settings.register(game.system.id, "ascendingAC", {
     name: game.i18n.localize("OSE.Setting.AscendingAC"),
     hint: game.i18n.localize("OSE.Setting.AscendingACHint"),
@@ -44,7 +47,6 @@ const registerSettings = () => {
     type: Boolean,
     config: true,
   });
-
   game.settings.register(game.system.id, "morale", {
     name: game.i18n.localize("OSE.Setting.Morale"),
     hint: game.i18n.localize("OSE.Setting.MoraleHint"),
@@ -53,7 +55,6 @@ const registerSettings = () => {
     type: Boolean,
     config: true,
   });
-
   game.settings.register(game.system.id, "encumbranceOption", {
     name: game.i18n.localize("OSE.Setting.Encumbrance"),
     hint: game.i18n.localize("OSE.Setting.EncumbranceHint"),
@@ -62,11 +63,10 @@ const registerSettings = () => {
     type: String,
     config: true,
     choices: Object.values(CONFIG.OSE.encumbranceOptions)
-    .reduce((obj, enc) => {
-      return {...obj, [enc.type]: enc.localizedLabel}
-    }, {}) as SettingConfig<EncumbranceOption>["choices"],
+      .reduce((obj, enc) => {
+        return {...obj, [enc.type]: enc.localizedLabel}
+      }, {}) as SettingConfig<EncumbranceOption>["choices"],
   });
-
   game.settings.register(game.system.id, "significantTreasure", {
     name: game.i18n.localize("OSE.Setting.SignificantTreasure"),
     hint: game.i18n.localize("OSE.Setting.SignificantTreasureHint"),
@@ -75,7 +75,6 @@ const registerSettings = () => {
     type: Number,
     config: true,
   });
-
   game.settings.register(game.system.id, "languages", {
     name: game.i18n.localize("OSE.Setting.Languages"),
     hint: game.i18n.localize("OSE.Setting.LanguagesHint"),
@@ -106,7 +105,6 @@ const registerSettings = () => {
     config: true,
   });
 };
-
 declare global {
   namespace ClientSettings {
     // Include OSE settings in addition to foundry default settings
@@ -122,5 +120,4 @@ declare global {
     }
   }
 }
-
 export default registerSettings;

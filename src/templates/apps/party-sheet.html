@@ -42,8 +42,8 @@
             <div class="field-short" title="{{localize 'OSE.ArmorClass'}}">
               <i class="fas fa-shield-alt"></i>
               {{#if @root.settings.ascending}}<strong
-                >{{e.system.aac.value}}</strong
-              >
+            >{{e.system.aac.value}}</strong
+            >
               <sub>{{e.system.aac.naked}}</sub>
               {{else}}<strong>{{e.system.ac.value}}</strong>
               <sub>{{e.system.ac.naked}}</sub>
@@ -77,10 +77,10 @@
                 title="{{localize 'OSE.movement.base'}}"
               ></i>
               <span title="{{localize 'OSE.movement.encounter.long'}}"
-                >{{e.system.movement.encounter}}</span
+              >{{e.system.movement.encounter}}</span
               >
               <sub title="{{localize 'OSE.movement.exploration.long'}}"
-                >{{e.system.movement.base}}</sub
+              >{{e.system.movement.base}}</sub
               >
             </div>
             {{#if (eq e.type 'character')}}
@@ -97,15 +97,15 @@
             <div class="field-longer flexrow">
               {{#each e.system.saves as |s i|}}
               <span title="{{lookup @root.config.saves_long i}}"
-                >{{lookup @root.config.saves_short i}} {{s.value}}</span
+              >{{lookup @root.config.saves_short i}} {{s.value}}</span
               >
               {{/each}} {{#if (eq e.type 'character')}}<span
-                ><i
-                  class="fas fa-magic"
-                  title="{{localize 'OSE.saves.magic.long'}}"
-                ></i
-                >{{mod e.system.scores.wis.mod}}</span
-              >{{/if}}
+            ><i
+              class="fas fa-magic"
+              title="{{localize 'OSE.saves.magic.long'}}"
+            ></i
+            >{{mod e.system.scores.wis.mod}}</span
+            >{{/if}}
             </div>
           </div>
         </div>

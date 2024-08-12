@@ -4,24 +4,21 @@
 import skipRollDialogCheck from "../helpers-behaviour";
 import OSE from "../config";
 import OseEntityTweaks from "../dialog/entity-tweaks";
-
 export default class OseActorSheet extends ActorSheet {
   getData() {
     const data = foundry.utils.deepClone(super.getData().data);
     data.owner = this.actor.isOwner;
     data.editable = this.actor.sheet.isEditable;
-
     data.config = {
       ...CONFIG.OSE,
       ascendingAC: game.settings.get(game.system.id, "ascendingAC"),
       initiative: game.settings.get(game.system.id, "initiative") !== "group",
       encumbrance: game.settings.get(game.system.id, "encumbranceOption"),
+      dolmenwood: game.settings.get(game.system.id, "dolmenwood"),
     };
     data.isNew = this.actor.isNew();
-
     return data;
   }
-
   activateEditor(name, options, initialContent) {
     // remove some controls to the editor as the space is lacking
     // if (name === "data.details.description") {
@@ -29,56 +26,44 @@ export default class OseActorSheet extends ActorSheet {
     // }
     super.activateEditor(name, options, initialContent);
   }
-
   // Helpers
-
   _getItemFromActor(event) {
     const li = event.currentTarget.closest(".item-entry");
     return this.actor.items.get(li.dataset.itemId);
   }
-
   // end Helpers
-
   _toggleItemCategory(event) {
     event.preventDefault();
     const targetCategory = $(event.currentTarget);
     const items = targetCategory.next(".item-list");
-
     if (items.css("display") === "none") {
       const el = $(event.currentTarget).find(".fas.fa-caret-right");
       el.removeClass("fa-caret-right");
       el.addClass("fa-caret-down");
-
       items.slideDown(200);
     } else {
       const el = $(event.currentTarget).find(".fas.fa-caret-down");
       el.removeClass("fa-caret-down");
       el.addClass("fa-caret-right");
-
       items.slideUp(200);
     }
   }
-
   _toggleContainedItems(event) {
     event.preventDefault();
     const targetItems = $(event.target.closest(".container"));
     const items = targetItems.find(".item-list.contained-items");
-
     if (items.css("display") === "none") {
       const el = targetItems.find(".fas.fa-caret-right");
       el.removeClass("fa-caret-right");
       el.addClass("fa-caret-down");
-
       items.slideDown(200);
     } else {
       const el = targetItems.find(".fas.fa-caret-down");
       el.removeClass("fa-caret-down");
       el.addClass("fa-caret-right");
-
       items.slideUp(200);
     }
   }
-
   _toggleItemSummary(event) {
     event.preventDefault();
     const itemSummary = event.currentTarget
@@ -86,13 +71,11 @@ export default class OseActorSheet extends ActorSheet {
       .querySelector(".item-summary");
     itemSummary.style.display = itemSummary.style.display === "" ? "block" : "";
   }
-
   async _displayItemInChat(event) {
     const li = $(event.currentTarget).closest(".item-entry");
     const item = this.actor.items.get(li.data("itemId"));
     item.show();
   }
-
   // eslint-disable-next-line no-underscore-dangle, consistent-return
   async _removeItemFromActor(item) {
     if (item.type === "ability" || item.type === "spell") {
@@ -104,7 +87,6 @@ export default class OseActorSheet extends ActorSheet {
       const newItemIds = this.actor.items
         .get(containerId)
         .system.itemIds.filter((o) => o !== item.id);
-
       await this.actor.updateEmbeddedDocuments("Item", [
         { _id: containerId, system: { itemIds: newItemIds } },
       ]);
@@ -117,14 +99,11 @@ export default class OseActorSheet extends ActorSheet {
           acc.push({ _id: val, "system.containerId": "" });
         return acc;
       }, []);
-
       await this.actor.updateEmbeddedDocuments("Item", updateData);
     }
-
     // eslint-disable-next-line no-underscore-dangle
     this.actor.deleteEmbeddedDocuments("Item", [item._id]);
   }
-
   /**
    * @param event
    * @param {bool} decrement
@@ -139,7 +118,6 @@ export default class OseActorSheet extends ActorSheet {
       "system.quantity.value": decrement ? --quantity : ++quantity,
     });
   }
-
   async _onSpellChange(event) {
     event.preventDefault();
     const item = this._getItemFromActor(event);
@@ -152,7 +130,6 @@ export default class OseActorSheet extends ActorSheet {
       });
     }
   }
-
   async _resetSpells(event) {
     const spells = $(event.currentTarget)
       .closest(".inventory.spells")
@@ -167,7 +144,6 @@ export default class OseActorSheet extends ActorSheet {
       });
     });
   }
-
   async _rollAbility(event) {
     const item = this._getItemFromActor(event);
     const itemData = item?.system;
@@ -184,14 +160,12 @@ export default class OseActorSheet extends ActorSheet {
       item.rollFormula({ skipDialog: skipRollDialogCheck(event) });
     }
   }
-
   async _rollSave(event) {
     const actorObject = this.actor;
     const element = event.currentTarget;
     const { save } = element.parentElement.parentElement.dataset;
     actorObject.rollSave(save, { event });
   }
-
   async _rollAttack(event) {
     const actorObject = this.actor;
     const element = event.currentTarget;
@@ -201,7 +175,6 @@ export default class OseActorSheet extends ActorSheet {
       skipDialog: skipRollDialogCheck(event),
     });
   }
-
   _onSortItem(event, itemData) {
     const source = this.actor.items.get(itemData._id);
     const siblings = this.actor.items.filter(
@@ -212,7 +185,6 @@ export default class OseActorSheet extends ActorSheet {
     const target = siblings.find((s) => s.data._id === targetId);
     if (!target) throw new Error(`Couldn't drop near ${event.target}`);
     const targetData = target?.system;
-
     // Dragging items into a container
     if (
       (target?.type === "container" || target?.data?.type === "container") &&
@@ -228,17 +200,13 @@ export default class OseActorSheet extends ActorSheet {
         { _id: source.id, "system.containerId": "" },
       ]);
     }
-
     super._onSortItem(event, itemData);
   }
-
   _onDragStart(event) {
     const li = event.currentTarget;
     let itemIdsArray = [];
     if (event.target.classList.contains("content-link")) return;
-
     let dragData;
-
     // Owned Items
     if (li.dataset.itemId) {
       const item = this.actor.items.get(li.dataset.itemId);
@@ -250,20 +218,17 @@ export default class OseActorSheet extends ActorSheet {
         itemIdsArray = item.system.itemIds;
       }
     }
-
     // Create drag data
     dragData.actorId = this.actor.id;
     dragData.sceneId = this.actor.isToken ? canvas.scene?.id : null;
     dragData.tokenId = this.actor.isToken ? this.actor.token.id : null;
     dragData.pack = this.actor.pack;
-
     // Active Effect
     if (li.dataset.effectId) {
       const effect = this.actor.effects.get(li.dataset.effectId);
       dragData.type = "ActiveEffect";
       dragData.data = effect.data;
     }
-
     // Set data transfer
     event.dataTransfer.setData(
       "text/plain",
@@ -277,18 +242,14 @@ export default class OseActorSheet extends ActorSheet {
       })
     );
   }
-
   // eslint-disable-next-line no-underscore-dangle
   async _onDropFolder(event, data) {
     const folder = await fromUuid(data.uuid);
     if (!folder || folder.type !== "Item") return;
-
     let itemArray = folder.contents || [];
-
     folder.getSubfolders(true).forEach((subfolder) => {
       itemArray.push(...subfolder.contents);
     });
-
     // Compendium items
     if (itemArray.length > 0 && itemArray[0]?.uuid?.includes("Compendium")) {
       const items = [];
@@ -297,45 +258,34 @@ export default class OseActorSheet extends ActorSheet {
       });
       itemArray = items;
     }
-
     this._onDropItemCreate(itemArray);
   }
-
   // eslint-disable-next-line no-underscore-dangle
   async _onDropItem(event, data) {
     const targetId = event.target.closest(".item")?.dataset?.itemId;
     const targetItem = this.actor.items.get(targetId);
     const targetIsContainer = targetItem?.type === "container";
-
     // This eats the event.target as it is parsed with the TextEditor.
     const item = await Item.implementation.fromDropData(data);
     const itemData = item.toObject();
-
     const exists = !!this.actor.items.get(item.id);
-
     const isContainer = this.actor.items.get(item.system.containerId);
-
     // Issue: https://github.com/vttred/ose/issues/357
     if (item.id === targetId) return;
-
     if (!exists && !targetIsContainer)
       // eslint-disable-next-line no-underscore-dangle
       return this._onDropItemCreate([itemData]);
-
     // eslint-disable-next-line no-underscore-dangle
     if (isContainer) return this._onContainerItemRemove(item, isContainer);
-
     // eslint-disable-next-line no-underscore-dangle
     if (targetIsContainer) return this._onContainerItemAdd(item, targetItem);
   }
-
   async _onContainerItemRemove(item, container) {
     const newList = container.system.itemIds.filter((s) => s != item.id);
     const itemObj = this.object.items.get(item.id);
     await container.update({ system: { itemIds: newList } });
     await itemObj.update({ system: { containerId: "" } });
   }
-
   async _onContainerItemAdd(item, target) {
     const alreadyExistsInActor = target.parent.items.find(
       (i) => i.id === item.id
@@ -346,7 +296,6 @@ export default class OseActorSheet extends ActorSheet {
       const newItem = await this._onDropItemCreate([item.toObject()]);
       latestItem = newItem.pop();
     }
-
     const alreadyExistsInContainer = target.system.itemIds.find(
       (i) => i.id === latestItem.id
     );
@@ -356,7 +305,6 @@ export default class OseActorSheet extends ActorSheet {
       await latestItem.update({ system: { containerId: target.id } });
     }
   }
-
   // eslint-disable-next-line no-underscore-dangle, consistent-return
   async _onDropItemCreate(droppedItem, targetContainer = false) {
     // override to fix hidden items because their original containers don't exist on this actor
@@ -383,16 +331,13 @@ export default class OseActorSheet extends ActorSheet {
     if (!targetContainer) {
       return this.actor.createEmbeddedDocuments("Item", droppedItem);
     }
-
     const { itemIds } = targetContainer.system;
     itemIds.push(droppedItem.id);
     const item = this.actor.items.get(droppedItem[0].id);
     await item.update({ system: { containerId: targetContainer.id } });
     await targetContainer.update({ system: { itemIds } });
   }
-
   /* -------------------------------------------- */
-
   async _chooseItemType(choices = ["weapon", "armor", "shield", "gear"]) {
     const templateData = { types: choices };
     const dlg = await renderTemplate(
@@ -424,7 +369,6 @@ export default class OseActorSheet extends ActorSheet {
       }).render(true);
     });
   }
-
   // eslint-disable-next-line no-underscore-dangle
   _createItem(event) {
     event.preventDefault();
@@ -434,7 +378,6 @@ export default class OseActorSheet extends ActorSheet {
       name: name || `New ${type.capitalize()}`,
       type,
     });
-
     // Getting back to main logic
     if (type === "choice") {
       const choices = header.dataset.choices.split(",");
@@ -450,11 +393,9 @@ export default class OseActorSheet extends ActorSheet {
       return this.actor.createEmbeddedDocuments("Item", [itemData], {});
     }
   }
-
   async _updateItemQuantity(event) {
     event.preventDefault();
     const item = this._getItemFromActor(event);
-
     if (event.target.dataset.field === "value") {
       return item.update({
         "system.quantity.value": parseInt(event.target.value),
@@ -466,13 +407,11 @@ export default class OseActorSheet extends ActorSheet {
       });
     }
   }
-
   // Override to set resizable initial size
   // eslint-disable-next-line no-underscore-dangle
   async _renderInner(...args) {
     const html = await super._renderInner(...args);
     this.form = html[0];
-
     // Resize resizable classes
     const resizable = html.find(".resizable");
     if (resizable.length === 0) {
@@ -484,12 +423,10 @@ export default class OseActorSheet extends ActorSheet {
     });
     return html;
   }
-
   // eslint-disable-next-line no-underscore-dangle
   async _onResize(event) {
     // eslint-disable-next-line no-underscore-dangle
     super._onResize(event);
-
     const html = $(this.form);
     const resizable = html.find(".resizable");
     if (resizable.length === 0) {
@@ -512,7 +449,6 @@ export default class OseActorSheet extends ActorSheet {
       }
     });
   }
-
   // eslint-disable-next-line no-underscore-dangle
   _onConfigureActor(event) {
     event.preventDefault();
@@ -521,7 +457,6 @@ export default class OseActorSheet extends ActorSheet {
       left: this.position.left + (this.position.width - 400) / 2,
     }).render(true);
   }
-
   /**
    * Extend and override the sheet header buttons
    *
@@ -529,7 +464,6 @@ export default class OseActorSheet extends ActorSheet {
    */
   _getHeaderButtons() {
     let buttons = super._getHeaderButtons();
-
     // Token Configuration
     const canConfigure = game.user.isGM || this.actor.isOwner;
     if (this.options.editable && canConfigure) {
@@ -544,28 +478,22 @@ export default class OseActorSheet extends ActorSheet {
     }
     return buttons;
   }
-
   activateListeners(html) {
     super.activateListeners(html);
-
     // Attributes
     html.find(".saving-throw .attribute-name a").click((event) => {
       this._rollSave(event);
     });
-
     html.find(".attack a").click((event) => {
       this._rollAttack(event);
     });
-
     html.find(".hit-dice .attribute-name").click((event) => {
       this.actor.rollHitDice({ event });
     });
-
     // Items (Abilities, Inventory and Spells)
     html.find(".item-rollable .item-image").click(async (event) => {
       this._rollAbility(event);
     });
-
     html.find(".inventory .item-category-title").click((event) => {
       this._toggleItemCategory(event);
     });
@@ -575,35 +503,27 @@ export default class OseActorSheet extends ActorSheet {
     html.find(".inventory .category-caret").click((event) => {
       this._toggleContainedItems(event);
     });
-
     html.find(".item-name").click((event) => {
       this._toggleItemSummary(event);
     });
-
     html.find(".item-controls .item-show").click(async (event) => {
       this._displayItemInChat(event);
     });
-
     // Everything below here is only needed if the sheet is editable
     if (!this.options.editable) return;
-
     // Item Management
     html.find(".item-create").click((event) => {
       // eslint-disable-next-line no-underscore-dangle
       this._createItem(event);
     });
-
     html.find(".item-edit").click((event) => {
       const item = this._getItemFromActor(event);
       item.sheet.render(true);
     });
-
     html.find(".item-delete").click((event) => {
       const item = this._getItemFromActor(event);
-
       if (item?.type !== "container" || !item?.system?.itemIds?.length > 0)
         return this._removeItemFromActor(item);
-
       Dialog.confirm({
         title: game.i18n.localize("OSE.dialog.deleteContainer"),
         content: game.i18n.localize("OSE.dialog.confirmDeleteContainer"),
@@ -613,12 +533,10 @@ export default class OseActorSheet extends ActorSheet {
         defaultYes: false,
       });
     });
-
     html
       .find(".quantity input")
       .click((ev) => ev.target.select())
       .change(this._updateItemQuantity.bind(this));
-
     // Consumables
     html.find(".consumable-counter .full-mark").click((event) => {
       this._useConsumable(event, true);
@@ -626,13 +544,11 @@ export default class OseActorSheet extends ActorSheet {
     html.find(".consumable-counter .empty-mark").click((event) => {
       this._useConsumable(event, false);
     });
-
     // Spells
     html
       .find(".memorize input")
       .click((event) => event.target.select())
       .change(this._onSpellChange.bind(this));
-
     html
       .find(".spells .item-reset[data-action='reset-spells']")
       .click((event) => {

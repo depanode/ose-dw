@@ -5,10 +5,8 @@
 import { QuenchMethods } from "../../../e2e";
 import { openWindows, waitForInput } from "../../../e2e/testUtils";
 import OsePartyXP from "../party-xp";
-
 export const key = "ose.party-xp.sheet";
 export const options = { displayName: "OSE: Party XP: Sheet" };
-
 export default ({ describe, it, expect, assert }: QuenchMethods) => {
   describe("defaultOptions()", () => {
     it("Has correctly set defaultOptions", () => {
@@ -23,7 +21,6 @@ export default ({ describe, it, expect, assert }: QuenchMethods) => {
       assert(partyXP.options.closeOnSubmit);
     });
   });
-
   describe("title()", () => {
     it("Creates string in dialog window title", async () => {
       const partyXP = new OsePartyXP();
@@ -39,7 +36,6 @@ export default ({ describe, it, expect, assert }: QuenchMethods) => {
       expect(openWindows("party-xp").length).equal(0);
     });
   });
-
   describe("getData()", () => {
     it("Returns proper data", () => {
       const sheet = new OsePartyXP();
@@ -53,7 +49,6 @@ export default ({ describe, it, expect, assert }: QuenchMethods) => {
       expect(keys).contain("settings");
     });
   });
-
   // @todo: Test with Cypress or similar, or mock event (see actor-sheet-e2e)
   describe("_onDrop(event)", () => {});
   describe("_updateObject(event)", () => {});

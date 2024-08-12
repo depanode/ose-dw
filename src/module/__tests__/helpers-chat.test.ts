@@ -8,14 +8,11 @@ import {
   addChatMessageContextOptions,
   functionsForTesting,
 } from "../helpers-chat";
-
 const { applyChatCardDamage } = functionsForTesting;
-
 export const key = "ose.helpers.chat";
 export const options = {
   displayName: "OSE: Helpers: Chat",
 };
-
 export default ({ describe, it, before, after, expect }: QuenchMethods) => {
   // @todo: How do we test these properly?
   describe("applyChatCardDamage(roll, multiplier)", () => {});

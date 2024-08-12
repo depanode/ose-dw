@@ -9,7 +9,7 @@
         <div class="details">
           <div class="form-group">
             <label title="{{localize 'OSE.items.Cost'}}"
-              ><i class="fas fa-circle"></i
+            ><i class="fas fa-circle"></i
             ></label>
             <div class="form-fields">
               <input
@@ -23,7 +23,7 @@
           {{#unless (eq @root.config.encumbrance 'itembased')}}
           <div class="form-group">
             <label title="{{localize 'OSE.items.WeightLong'}}"
-              ><i class="fas fa-weight-hanging"></i
+            ><i class="fas fa-weight-hanging"></i
             ></label>
             <div class="form-fields">
               <input
@@ -37,7 +37,7 @@
           {{else}}
           <div class="form-group">
             <label title="{{localize 'OSE.items.ItemBasedEncumbranceLong'}}"
-              ><i class="fas fa-weight-hanging"></i
+            ><i class="fas fa-weight-hanging"></i
             ></label>
             <div class="form-fields">
               <input
@@ -87,7 +87,7 @@
         </div>
         <div class="form-group">
           <label title="{{localize 'OSE.items.AtkBonus'}}"
-            >{{localize 'OSE.items.Bonus'}}</label
+          >{{localize 'OSE.items.Bonus'}}</label
           >
           <div class="form-fields">
             <input
@@ -103,13 +103,13 @@
             title="{{localize 'OSE.items.Melee'}}"
             class="melee-toggle {{#if
             system.melee}}active{{/if}}"
-            ><i class="fas fa-fist-raised"></i
+          ><i class="fas fa-fist-raised"></i
           ></a>
           <a
             title="{{localize 'OSE.items.Missile'}}"
             class="missile-toggle
             {{#if system.missile}}active{{/if}}"
-            ><i class="fas fa-bullseye"></i
+          ><i class="fas fa-bullseye"></i
           ></a>
         </div>
         {{#if system.missile}}
@@ -166,11 +166,11 @@
       </div>
       <div class="description weapon-editor">
         {{editor enriched.description
-          target="system.description"
-          button=true
-          owner=owner
-          editable=editable
-          async=true
+        target="system.description"
+        button=true
+        owner=owner
+        editable=editable
+        async=true
         }}
       </div>
     </div>

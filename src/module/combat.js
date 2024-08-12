@@ -2,11 +2,9 @@
  * @file System-level odifications to the way combat works
  */
 import OSE from "./config";
-
 const OseCombat = {
   STATUS_SLOW: -789,
   STATUS_DIZZY: -790,
-
   debounce(callback, wait) {
     let timeoutId = null;
     return (...args) => {
@@ -29,8 +27,7 @@ const OseCombat = {
     // Roll init
     for (const group in groups) {
       // Object.keys(groups).forEach((group) => {
-      const roll = new Roll("1d6");
-      await roll.evaluate();
+      const roll = new Roll("1d6").evaluate({ async: false });
       await roll.toMessage({
         flavor: game.i18n.format("OSE.roll.initiative", {
           group: CONFIG.OSE.colors[group],
@@ -59,10 +56,8 @@ const OseCombat = {
         }
       }
     }
-
     await combat.setupTurns();
   },
-
   async resetInitiative(combat, data) {
     const reroll = game.settings.get(game.system.id, "rerollInitiative");
     if (!["reset", "reroll"].includes(reroll)) {
@@ -70,7 +65,6 @@ const OseCombat = {
     }
     combat.resetAll();
   },
-
   async individualInitiative(combat, data) {
     const updates = [];
     const rolls = [];
@@ -111,7 +105,6 @@ const OseCombat = {
         value = OseCombat.STATUS_DIZZY;
       }
       updates[i].initiative = value;
-
       // render template
       const template = `${OSE.systemPath()}/templates/chat/roll-individual-initiative.html`;
       const tData = {
@@ -134,7 +127,6 @@ const OseCombat = {
       await combat.updateEmbeddedDocuments("Combatant", updates);
     data.turn = 0;
   },
-
   format(object, html, user) {
     html.find(".initiative").each((_, span) => {
       span.innerHTML =
@@ -146,7 +138,6 @@ const OseCombat = {
           ? '<i class="fas fa-dizzy"></i>'
           : span.innerHTML;
     });
-
     html.find(".combatant").each((_, ct) => {
       // Append spellcast and retreat
       const controls = $(ct).find(".combatant-controls .combatant-control");
@@ -171,12 +162,10 @@ const OseCombat = {
         );
     });
     OseCombat.announceListener(html);
-
     const init = game.settings.get(game.system.id, "initiative") === "group";
     if (!init) {
       return;
     }
-
     html.find('.combat-control[data-control="rollNPC"]').remove();
     html.find('.combat-control[data-control="rollAll"]').remove();
     const trash = html.find(
@@ -185,15 +174,12 @@ const OseCombat = {
     $(
       '<a class="combat-control" data-control="reroll"><i class="fas fa-dice"></i></a>'
     ).insertBefore(trash);
-
     html.find(".combatant").each((_, ct) => {
       // Can't roll individual inits
       $(ct).find(".roll").remove();
-
       // Get group color
       const cmbtant = object.viewed.combatants.get(ct.dataset.combatantId);
       const color = cmbtant.getFlag(game.system.id, "group");
-
       // Append colored flag
       const controls = $(ct).find(".combatant-controls");
       controls.prepend(
@@ -202,7 +188,6 @@ const OseCombat = {
     });
     OseCombat.addListeners(html);
   },
-
   updateCombatant(combatant, data) {
     const init = game.settings.get(game.system.id, "initiative");
     // Why do you reroll ?
@@ -230,7 +215,6 @@ const OseCombat = {
       });
     }
   },
-
   announceListener(html) {
     html.find(".combatant-control.prepare-spell").click((ev) => {
       ev.preventDefault();
@@ -253,7 +237,6 @@ const OseCombat = {
       }
     });
   },
-
   addListeners(html) {
     // Cycle through colors
     html.find(".combatant-control.flag").click((ev) => {
@@ -275,7 +258,6 @@ const OseCombat = {
         combatant.setFlag(game.system.id, "group", colors[index]);
       }
     });
-
     html.find('.combat-control[data-control="reroll"]').click((ev) => {
       if (!game.combat) {
         return;
@@ -289,7 +271,6 @@ const OseCombat = {
       }
     });
   },
-
   addCombatant(combat, data, options, id) {
     const token = canvas.tokens.get(data.tokenId);
     let color = "black";
@@ -299,12 +280,10 @@ const OseCombat = {
         color = "red";
         break;
       }
-
       case 0: {
         color = "yellow";
         break;
       }
-
       case 1: {
         color = "green";
         break;
@@ -317,7 +296,6 @@ const OseCombat = {
     };
     combat.updateSource({ flags: { ose: { group: color } } });
   },
-
   activateCombatant(li) {
     const turn = game.combat.turns.findIndex(
       (turn) => turn.id === li.data("combatant-id")
@@ -326,7 +304,6 @@ const OseCombat = {
       game.combat.update({ turn });
     }
   },
-
   addContextEntry(html, options) {
     options.unshift({
       name: "Set Active",
@@ -334,7 +311,6 @@ const OseCombat = {
       callback: OseCombat.activateCombatant,
     });
   },
-
   async preUpdateCombat(combat, data, diff, id) {
     const init = game.settings.get(game.system.id, "initiative");
     const reroll = game.settings.get(game.system.id, "rerollInitiative");
@@ -357,5 +333,4 @@ const OseCombat = {
     }
   },
 };
-
 export default OseCombat;

@@ -18,37 +18,31 @@ import {
   waitForInput,
 } from "../../e2e/testUtils";
 import { createOseMacro, rollItemMacro } from "../helpers-macros";
-
 export const key = "ose.helpers.macro";
 export const options = { displayName: "OSE: Helpers: Macro" };
-
 /* MOCKING HELPERS */
 const createMockActor = async (type: string, data: object = {}) =>
   createMockActorKey(type, data, key);
-
 /* CLEAN UP HELPERS */
 const cleanUpActors = () => cleanUpActorsByKey(key);
-
 export default ({
-  describe,
-  it,
-  expect,
-  before,
-  after,
-  afterEach,
-}: QuenchMethods) => {
+                  describe,
+                  it,
+                  expect,
+                  before,
+                  after,
+                  afterEach,
+                }: QuenchMethods) => {
   before(async () => {
     game?.scenes?.active?.update({ active: false });
     await ui.notifications?.close();
   });
-
   afterEach(async () => {
     cleanUpMacros();
     cleanUpActors();
     cleanUpWorldItems();
     cleanUpScenes();
   });
-
   after(async () => {
     closeDialogs();
     cleanUpMacros();
@@ -57,25 +51,20 @@ export default ({
     cleanUpScenes();
     await ui.notifications?.render(true);
   });
-
   describe("createOseMacro(data, slot)", () => {
     it("Can create macro", async () => {
       const macro = await createMockMacro();
       expect(game.macros?.contents.find((m) => m.uuid === macro?.uuid)).not
         .undefined;
     });
-
     it("Can drag Macro to hotbar", async () => {
       const macro = await createMockMacro();
       const data = { type: "Macro", uuid: macro?.uuid };
       const macroSlot = 9;
-
       await createOseMacro(data, macroSlot);
       const hotbar = game.user?.getHotbarMacros(1);
-
       expect(hotbar[macroSlot - 1].macro).equal(macro);
     });
-
     it("Dragging Actor to hotbar send notification", async () => {
       const actor = await createMockActor("character");
       const data = { type: actor?.type, uuid: actor?.uuid };
@@ -89,7 +78,6 @@ export default ({
       expect(ui.notifications?.queue.length).equal(0);
       await actor?.delete();
     });
-
     it("Dragging World Item to hotbar send notification", async () => {
       const actor = await createMockActor("character");
       const worldItem = await createWorldTestItem("weapon");
@@ -105,7 +93,6 @@ export default ({
       await actor?.delete();
       await worldItem?.delete();
     });
-
     describe("Dragging all item types creates macros", () => {
       const itemTypes = new Set([
         "spell",
@@ -129,7 +116,6 @@ export default ({
             },
           };
           const macroSlot = 9;
-
           await createOseMacro(data, macroSlot);
           const macro = game.user?.getHotbarMacros()[macroSlot - 1];
           expect(macro?.macro?.command).equal(
@@ -140,7 +126,6 @@ export default ({
       });
     });
   });
-
   describe("rollItemMacro(itemName)", () => {
     it("No scene creates warning", async () => {
       const type = "weapon";
@@ -158,7 +143,6 @@ export default ({
       expect(ui.notifications?.queue.length).equal(0);
       await actor?.delete();
     });
-
     it("No assigned actor creates warning", async () => {
       const type = "weapon";
       const actor = await createMockActor("character");
@@ -178,7 +162,6 @@ export default ({
       await actor?.delete();
       await scene?.delete();
     });
-
     it("Scene & assigned actor creates roll", async () => {
       const type = "weapon";
       const actor = await createMockActor("character");
@@ -195,7 +178,6 @@ export default ({
       await actor?.delete();
       await scene?.delete();
     });
-
     it("Duplicate item creates warning but also craetes rolls", async () => {
       const type = "weapon";
       const actor = await createMockActor("character");
@@ -221,7 +203,6 @@ export default ({
       await actor?.delete();
       await scene?.delete();
     });
-
     it("Missing item creates warning", async () => {
       const type = "weapon";
       const actor = await createMockActor("character");

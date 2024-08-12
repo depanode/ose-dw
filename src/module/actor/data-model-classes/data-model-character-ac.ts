@@ -1,7 +1,6 @@
 /**
  * @file A class to handle the nested AC/AAC props on OseDataModelCharacter.
  */
-
 interface CharacterAC {
   base: number;
   naked: number;
@@ -9,26 +8,16 @@ interface CharacterAC {
   value: number;
   mod: number;
 }
-
 export default class OseDataModelCharacterAC implements CharacterAC {
   static baseAscending = 10;
-
   static baseDescending = 9;
-
   static propAscending = "aac";
-
   static propDescending = "ac";
-
   #armor;
-
   #dexMod;
-
   #mod;
-
   #acProp;
-
   #isAscending;
-
   /**
    * AC Constructor
    *
@@ -46,14 +35,12 @@ export default class OseDataModelCharacterAC implements CharacterAC {
       ? OseDataModelCharacterAC.propAscending
       : OseDataModelCharacterAC.propDescending;
   }
-
   #getShieldBonus() {
     return (
       this.#armor.find(({ system: { type } }: Item) => type === "shield")
         ?.system[this.#acProp].value || 0
     );
   }
-
   /**
    * The base AC value for a character, depending on
    * if we're using ascending or descending AC
@@ -65,7 +52,6 @@ export default class OseDataModelCharacterAC implements CharacterAC {
       ? OseDataModelCharacterAC.baseAscending
       : OseDataModelCharacterAC.baseDescending;
   }
-
   /**
    * A character's armor class without armor or a shield
    *
@@ -76,7 +62,6 @@ export default class OseDataModelCharacterAC implements CharacterAC {
       ? this.base + this.#dexMod
       : this.base - this.#dexMod;
   }
-
   /**
    * A character's shield bonus, if any
    *
@@ -85,7 +70,6 @@ export default class OseDataModelCharacterAC implements CharacterAC {
   get shield() {
     return this.#getShieldBonus();
   }
-
   /**
    * The AC value from worn armor
    *
@@ -98,10 +82,8 @@ export default class OseDataModelCharacterAC implements CharacterAC {
     )?.system[this.#acProp].value;
     // Null if any falsy value but 0
     if (!armor && armor !== 0) return null;
-
     return this.#isAscending ? armor + this.#dexMod : armor - this.#dexMod;
   }
-
   /**
    * A character's armor class
    *
@@ -114,11 +96,9 @@ export default class OseDataModelCharacterAC implements CharacterAC {
       ? base + this.shield + this.mod
       : base - this.shield - this.mod;
   }
-
   // @TODO This will need to be editable once we get to creatures
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   set value(_change: number) {} // eslint-disable-line class-methods-use-this
-
   /**
    * A character's miscellaneous armor class modifier
    *
@@ -127,7 +107,6 @@ export default class OseDataModelCharacterAC implements CharacterAC {
   get mod() {
     return this.#mod;
   }
-
   set mod(change) {
     this.#mod = change;
   }

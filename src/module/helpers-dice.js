@@ -1,49 +1,41 @@
+/* eslint-disable switch-case/no-case-curly */
 /**
  * @file Helpful methods for dealing with OSE-specific dice logic
  */
 import OSE from "./config";
-
 const OseDice = {
   async sendRoll({
-    parts = [],
-    data = {},
-    title = null,
-    flavor = null,
-    speaker = null,
-    form = null,
-    chatMessage = true,
-  } = {}) {
+                   parts = [],
+                   data = {},
+                   title = null,
+                   flavor = null,
+                   speaker = null,
+                   form = null,
+                   chatMessage = true,
+                 } = {}) {
     const template = `${OSE.systemPath()}/templates/chat/roll-result.html`;
-
     const chatData = {
       user: game.user.id,
       speaker,
     };
-
     const templateData = {
       title,
       flavor,
       data,
-      config: CONFIG.OSE,
     };
-
     // Optionally include a situational bonus
     if (form !== null && form.bonus.value) {
       parts.push(form.bonus.value);
     }
-
-    const roll = new Roll(parts.join("+"), data);
-    await roll.evaluate({allowStrings: true});
-
+    // ;
+    const roll = new Roll(parts.join("+"), data).evaluate({ async: false });
     // Convert the roll to a chat message and return the roll
     let rollMode = game.settings.get("core", "rollMode");
     rollMode = form ? form.rollMode.value : rollMode;
-
     // Force blind roll (ability formulas)
     if (!form && data.roll.blindroll) {
       rollMode = game.user.isGM ? "selfroll" : "blindroll";
     }
-
     if (["gmroll", "blindroll"].includes(rollMode))
       chatData.whisper = ChatMessage.getWhisperRecipients("GM");
     if (rollMode === "selfroll") chatData.whisper = [game.user._id];
@@ -51,9 +43,7 @@ const OseDice = {
       chatData.blind = true;
       data.roll.blindroll = true;
     }
-
     templateData.result = OseDice.digestResult(data, roll);
-
     return new Promise((resolve) => {
       roll.render().then((r) => {
         templateData.rollOSE = r;
@@ -82,7 +72,6 @@ const OseDice = {
       });
     });
   },
-
   /**
    * Digesting results depending on type of roll
    *
@@ -98,7 +87,6 @@ const OseDice = {
       target: data.roll.target,
       total: roll.total,
     };
-
     const die = roll.terms[0].results[0].result;
     // eslint-disable-next-line default-case
     switch (data.roll.type) {
@@ -108,10 +96,8 @@ const OseDice = {
         } else {
           result.isFailure = true;
         }
-
         break;
       }
-
       case "above": {
         // SAVING THROWS
         if (roll.total >= result.target) {
@@ -119,10 +105,8 @@ const OseDice = {
         } else {
           result.isFailure = true;
         }
-
         break;
       }
-
       case "below": {
         // MORALE, EXPLORATION
         if (roll.total <= result.target) {
@@ -130,21 +114,26 @@ const OseDice = {
         } else {
           result.isFailure = true;
         }
-
         break;
       }
-
       case "check": {
-        // SCORE CHECKS (1s and 20s)
-        if (die === 1 || (roll.total <= result.target && die < 20)) {
+        const dolmenwood = game.settings.get(game.system.id, "dolmenwood");
+        if (!dolmenwood) {
+          // SCORE CHECKS (1s and 20s)
+          if (die === 1 || (roll.total <= result.target && die < 20)) {
+            result.isSuccess = true;
+          } else {
+            result.isFailure = true;
+          }
+          break;
+        }
+        if (die === 6 || roll.total >= 4) {
           result.isSuccess = true;
         } else {
           result.isFailure = true;
         }
-
         break;
       }
-
       case "table": {
         // Reaction
         const { table } = data.roll;
@@ -155,20 +144,16 @@ const OseDice = {
           }
         }
         result.details = output;
-
         break;
       }
-
-      default : {
+      default: {
         result.isSuccess = false;
         result.isFailure = false;
-
         break;
       }
     }
     return result;
   },
-
   /**
    * Evaluates if a roll is successful for both THAC0 and Ascending AC
    *
@@ -188,7 +173,6 @@ const OseDice = {
     }
     return roll.total + ac >= thac0;
   },
-
   /**
    * Digest the results of a target to reach, and an evaluated roll
    * to evaluate if it does hit or not. The function adds information
@@ -208,11 +192,9 @@ const OseDice = {
     };
     result.target = data.roll.thac0;
     const targetActorData = data.roll.target?.actor?.system || null;
-
     const targetAc = data.roll.target ? targetActorData.ac.value : 20;
     const targetAac = data.roll.target ? targetActorData.aac.value : -20;
     result.victim = data.roll.target || null;
-
     if (game.settings.get(game.system.id, "ascendingAC")) {
       const attackBonus = 19 - data.roll.thac0;
       if (this.attackIsSuccess(roll, targetAac, attackBonus)) {
@@ -234,7 +216,7 @@ const OseDice = {
       }
     } else if (this.attackIsSuccess(roll, result.target, targetAc)) {
       // Answer is bounded betweewn AC -3 and 9 (unarmored) and is shown in chat card
-      const value = Math.clamp(result.target - roll.total, -3, 9);
+      const value = Math.clamped(result.target - roll.total, -3, 9);
       result.details = game.i18n.format("OSE.messages.AttackSuccess", {
         result: value,
         bonus: result.target,
@@ -248,7 +230,6 @@ const OseDice = {
     }
     return result;
   },
-
   /**
    * Puts together the information needed to roll a Roll and the
    * expectations on hitting a target. Also creates the chat card
@@ -268,14 +249,14 @@ const OseDice = {
    * @returns {Promise || Void} - Either not returning anything, or a Promise for rendering a Chat Card
    */
   async sendAttackRoll({
-    parts = [],
-    data = {},
-    flags = {},
-    title = null,
-    flavor = null,
-    speaker = null,
-    form = null,
-  } = {}) {
+                         parts = [],
+                         data = {},
+                         flags = {},
+                         title = null,
+                         flavor = null,
+                         speaker = null,
+                         form = null,
+                       } = {}) {
     if (data.roll.dmg.filter((v) => v !== "").length === 0) {
       /**
        * @todo should this error be localized?
@@ -291,31 +272,25 @@ const OseDice = {
       speaker,
       flags,
     };
-
     const templateData = {
       title,
       flavor,
       data,
       config: CONFIG.OSE,
     };
-
     // Optionally include a situational bonus
     if (form !== null && form.bonus.value) parts.push(form.bonus.value);
-
-    const roll = new Roll(parts.join("+"), data);
-    await roll.evaluate();
-    const dmgRoll = new Roll(data.roll.dmg.join("+"), data);
-    await dmgRoll.evaluate();
-
+    const roll = new Roll(parts.join("+"), data).evaluate({ async: false });
+    const dmgRoll = new Roll(data.roll.dmg.join("+"), data).evaluate({
+      async: false,
+    });
     // Convert the roll to a chat message and return the roll
     let rollMode = game.settings.get("core", "rollMode");
     rollMode = form ? form.rollMode.value : rollMode;
-
     // Force blind roll (ability formulas)
     if (data.roll.blindroll) {
       rollMode = game.user.isGM ? "selfroll" : "blindroll";
     }
-
     if (["gmroll", "blindroll"].includes(rollMode))
       chatData.whisper = ChatMessage.getWhisperRecipients("GM");
     if (rollMode === "selfroll") chatData.whisper = [game.user._id];
@@ -323,9 +298,7 @@ const OseDice = {
       chatData.blind = true;
       data.roll.blindroll = true;
     }
-
     templateData.result = OseDice.digestAttackResult(data, roll);
-
     return new Promise((resolve) => {
       roll.render().then((r) => {
         templateData.rollOSE = r;
@@ -373,16 +346,15 @@ const OseDice = {
       });
     });
   },
-
   async RollSave({
-    parts = [],
-    data = {},
-    skipDialog = false,
-    speaker = null,
-    flavor = null,
-    title = null,
-    chatMessage = true,
-  } = {}) {
+                   parts = [],
+                   data = {},
+                   skipDialog = false,
+                   speaker = null,
+                   flavor = null,
+                   title = null,
+                   chatMessage = true,
+                 } = {}) {
     let rolled = false;
     const template = `${OSE.systemPath()}/templates/chat/roll-dialog.html`;
     const dialogData = {
@@ -391,7 +363,6 @@ const OseDice = {
       rollMode: game.settings.get("core", "rollMode"),
       rollModes: CONFIG.Dice.rollModes,
     };
-
     const rollData = {
       parts,
       data,
@@ -403,7 +374,6 @@ const OseDice = {
     if (skipDialog) {
       return OseDice.sendRoll(rollData);
     }
-
     const buttons = {
       ok: {
         label: game.i18n.localize("OSE.Roll"),
@@ -421,8 +391,7 @@ const OseDice = {
           rolled = true;
           rollData.form = html[0].querySelector("form");
           rollData.parts.push(`${rollData.data.roll.magic}`);
-          rollData.title += ` ${game.i18n.localize("OSE.saves.magic.short")} (${
-            rollData.data.roll.magic
+          rollData.title += ` ${game.i18n.localize("OSE.saves.magic.short")} (${rollData.data.roll.magic
           })`;
           roll = OseDice.sendRoll(rollData);
         },
@@ -430,13 +399,11 @@ const OseDice = {
       cancel: {
         icon: '<i class="fas fa-times"></i>',
         label: game.i18n.localize("OSE.Cancel"),
-        callback: (html) => {},
+        callback: (html) => { },
       },
     };
-
     const html = await renderTemplate(template, dialogData);
     let roll;
-
     // Create Dialog window
     return new Promise((resolve) => {
       new Dialog({
@@ -450,17 +417,16 @@ const OseDice = {
       }).render(true);
     });
   },
-
   async Roll({
-    parts = [],
-    data = {},
-    skipDialog = false,
-    speaker = null,
-    flavor = null,
-    title = null,
-    chatMessage = true,
-    flags = {},
-  } = {}) {
+               parts = [],
+               data = {},
+               skipDialog = false,
+               speaker = null,
+               flavor = null,
+               title = null,
+               chatMessage = true,
+               flags = {},
+             } = {}) {
     let rolled = false;
     const template = `${OSE.systemPath()}/templates/chat/roll-dialog.html`;
     const dialogData = {
@@ -485,7 +451,6 @@ const OseDice = {
         ? OseDice.sendAttackRoll(rollData)
         : OseDice.sendRoll(rollData);
     }
-
     const buttons = {
       ok: {
         label: game.i18n.localize("OSE.Roll"),
@@ -501,13 +466,11 @@ const OseDice = {
       cancel: {
         icon: '<i class="fas fa-times"></i>',
         label: game.i18n.localize("OSE.Cancel"),
-        callback: (html) => {},
+        callback: (html) => { },
       },
     };
-
     const html = await renderTemplate(template, dialogData);
     let roll;
-
     // Create Dialog window
     return new Promise((resolve) => {
       new Dialog({
@@ -522,5 +485,4 @@ const OseDice = {
     });
   },
 };
-
 export default OseDice;

@@ -2,7 +2,6 @@
  * @file A file that manages preloading our system templates
  */
 import OSE from "./config";
-
 const preloadHandlebarsTemplates = async () => {
   const templatePaths = [
     // Character Sheets
@@ -26,5 +25,4 @@ const preloadHandlebarsTemplates = async () => {
   ];
   return loadTemplates(templatePaths);
 };
-
 export default preloadHandlebarsTemplates;

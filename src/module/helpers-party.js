@@ -2,7 +2,6 @@
  * @file Helper functions for managing the Party Sheet
  */
 import OsePartySheet from "./party/party-sheet";
-
 export const addControl = (object, html) => {
   const control = `<button class='ose-party-sheet' type="button" title='${game.i18n.localize(
     "OSE.dialog.partysheet"
@@ -13,13 +12,10 @@ export const addControl = (object, html) => {
     Hooks.call("OSE.Party.showSheet");
   });
 };
-
 export const update = (actor) => {
   const partyFlag = actor.getFlag(game.system.id, "party");
-
   if (partyFlag === null) {
     return;
   }
-
   OsePartySheet.partySheet.render();
 };

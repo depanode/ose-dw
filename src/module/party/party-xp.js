@@ -3,7 +3,6 @@
  */
 import OSE from "../config";
 import OseParty from "./party";
-
 export default class OsePartyXP extends FormApplication {
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
@@ -15,9 +14,7 @@ export default class OsePartyXP extends FormApplication {
       closeOnSubmit: true,
     });
   }
-
   /* -------------------------------------------- */
-
   /**
    * Add the Entity name into the window title
    *
@@ -27,9 +24,7 @@ export default class OsePartyXP extends FormApplication {
   get title() {
     return game.i18n.localize("OSE.dialog.xp.deal");
   }
-
   /* -------------------------------------------- */
-
   /**
    * Construct and return the data object used to render the HTML template for this form application.
    *
@@ -44,7 +39,6 @@ export default class OsePartyXP extends FormApplication {
       settings: game.settings,
     };
   }
-
   // eslint-disable-next-line no-underscore-dangle, class-methods-use-this
   _onDrop(event) {
     event.preventDefault();
@@ -58,21 +52,17 @@ export default class OsePartyXP extends FormApplication {
     }
   }
   /* -------------------------------------------- */
-
   // eslint-disable-next-line no-underscore-dangle
   _updateObject(event) {
     // eslint-disable-next-line no-underscore-dangle
     this._dealXP(event);
   }
-
   // eslint-disable-next-line no-underscore-dangle
   _calculateShare() {
     const { currentParty } = OseParty;
-
     const html = $(this.form);
     const totalXP = html.find('input[name="total"]').val();
     const baseXpShare = parseFloat(totalXP) / currentParty.length;
-
     currentParty.forEach((a) => {
       const actorData = a?.system;
       const xpShare = Math.floor(
@@ -81,7 +71,6 @@ export default class OsePartyXP extends FormApplication {
       html.find(`li[data-actor-id='${a.id}'] input`).val(xpShare);
     });
   }
-
   // eslint-disable-next-line no-underscore-dangle
   _dealXP() {
     const html = $(this.form);
@@ -96,14 +85,11 @@ export default class OsePartyXP extends FormApplication {
       }
     });
   }
-
   activateListeners(html) {
     super.activateListeners(html);
-
     const totalField = html.find('input[name="total"]');
     // eslint-disable-next-line no-underscore-dangle
     totalField.on("input", this._calculateShare.bind(this));
-
     html.find('button[data-action="deal-xp"').click((event) => {
       super.submit(event);
     });

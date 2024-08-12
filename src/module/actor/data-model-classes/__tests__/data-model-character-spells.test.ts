@@ -3,12 +3,10 @@
  */
 import { QuenchMethods } from "../../../../e2e";
 import OseDataModelCharacterSpells from "../data-model-character-spells";
-
 export const key = "ose.actor.datamodel.character.spells";
 export const options = {
   displayName: "OSE: Actor: Data Model: Character Spells",
 };
-
 const createMockSpell = (lvl: number, spellOptions?: any): Item =>
   // eslint-disable-next-line new-cap
   new Item.implementation({
@@ -16,7 +14,6 @@ const createMockSpell = (lvl: number, spellOptions?: any): Item =>
     type: "spell",
     system: { ...spellOptions, lvl },
   }) as Item;
-
 const createMockSpellList = (spellOptions: any, ...levels: any) =>
   levels.reduce(
     (arr: Item[], lvCount: number, idx: number) => [
@@ -27,11 +24,9 @@ const createMockSpellList = (spellOptions: any, ...levels: any) =>
     ],
     []
   );
-
 // Core goes to 6, but we'll go to 9 just in case
 // someone wants to implement higher-level spells
 const spellsPerLevel = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-
 export default ({ describe, it, expect }: QuenchMethods) => {
   // Test for spells being sorted into buckets by spell level.
   describe("Spell levels", () => {
@@ -55,7 +50,6 @@ export default ({ describe, it, expect }: QuenchMethods) => {
         expect(spellData.slots[1].used).to.equal(0);
         expect(spellData.slots[1].max).to.equal(1);
       });
-
       it("with spells prepared, not cast", () => {
         const spells = [createMockSpell(1, { memorized: 1, cast: 1 })];
         const spellData = new OseDataModelCharacterSpells(
@@ -65,7 +59,6 @@ export default ({ describe, it, expect }: QuenchMethods) => {
         expect(spellData.slots[1].used).to.equal(1);
         expect(spellData.slots[1].max).to.equal(1);
       });
-
       it("with spells prepared and cast", () => {
         const spells = [createMockSpell(1, { memorized: 1, cast: 0 })];
         const spellData = new OseDataModelCharacterSpells(

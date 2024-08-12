@@ -5,13 +5,11 @@
 import OseDataModelCharacterEncumbranceDisabled from "./data-model-classes/data-model-character-encumbrance-disabled";
 import OseDataModelCharacterSpells from "./data-model-classes/data-model-character-spells";
 import OseDataModelCharacterMove from "./data-model-classes/data-model-character-move";
-
 const getItemsOfActorOfType = (actor, filterType, filterFn = null) =>
   actor.items
     .filter(({ type }) => type === filterType)
     .filter(filterFn || (() => true));
-
-export default class OseDataModelMonster extends foundry.abstract.TypeDataModel {
+export default class OseDataModelMonster extends foundry.abstract.DataModel {
   prepareDerivedData() {
     this.encumbrance = new OseDataModelCharacterEncumbranceDisabled();
     this.spells = new OseDataModelCharacterSpells(this.spells, this.#spellList);
@@ -19,14 +17,12 @@ export default class OseDataModelMonster extends foundry.abstract.TypeDataModel 
       this.encumbrance,
       this.config.movementAuto = false,
       this.movement.base
-      );
+    );
   }
-
   // @todo define schema options; stuff like min/max values and so on.
   static defineSchema() {
     const { StringField, NumberField, BooleanField, ObjectField, SchemaField } =
       foundry.data.fields;
-
     return {
       spells: new ObjectField(),
       details: new ObjectField(),
@@ -47,13 +43,20 @@ export default class OseDataModelMonster extends foundry.abstract.TypeDataModel 
       thac0: new ObjectField(),
       languages: new ObjectField(),
       saves: new SchemaField({
+        blast: new SchemaField({ value: new NumberField({ integer: true }) }),
         breath: new SchemaField({ value: new NumberField({ integer: true }) }),
         death: new SchemaField({ value: new NumberField({ integer: true }) }),
+        doom: new SchemaField({ value: new NumberField({ integer: true }) }),
+        hold: new SchemaField({ value: new NumberField({ integer: true }) }),
         paralysis: new SchemaField({
           value: new NumberField({ integer: true }),
         }),
+        ray: new SchemaField({ value: new NumberField({ integer: true }) }),
         spell: new SchemaField({ value: new NumberField({ integer: true }) }),
         wand: new SchemaField({ value: new NumberField({ integer: true }) }),
+        magicBonus: new SchemaField({
+          value: new NumberField({ integer: true }),
+        }),
       }),
       retainer: new SchemaField({
         enabled: new BooleanField(),
@@ -62,21 +65,18 @@ export default class OseDataModelMonster extends foundry.abstract.TypeDataModel 
       }),
     };
   }
-
   // @todo This only needs to be public until
   //       we can ditch sharing out AC/AAC.
   // eslint-disable-next-line class-methods-use-this
   get usesAscendingAC() {
     return game.settings.get(game.system.id, "ascendingAC");
   }
-
   get isNew() {
     return !Object.values(this.saves).reduce(
       (prev, curr) => prev + (parseInt(curr?.value, 10) || 0),
       0
     );
   }
-
   get containers() {
     return getItemsOfActorOfType(
       this.parent,
@@ -84,7 +84,6 @@ export default class OseDataModelMonster extends foundry.abstract.TypeDataModel 
       ({ system: { containerId } }) => !containerId
     );
   }
-
   get treasures() {
     return getItemsOfActorOfType(
       this.parent,
@@ -92,7 +91,6 @@ export default class OseDataModelMonster extends foundry.abstract.TypeDataModel 
       ({ system: { treasure, containerId } }) => treasure && !containerId
     ).sort((a, b) => a.name.localeCompare(b.name));
   }
-
   get items() {
     return getItemsOfActorOfType(
       this.parent,
@@ -100,7 +98,6 @@ export default class OseDataModelMonster extends foundry.abstract.TypeDataModel 
       ({ system: { treasure, containerId } }) => !treasure && !containerId
     ).sort((a, b) => a.name.localeCompare(b.name));
   }
-
   get weapons() {
     return getItemsOfActorOfType(
       this.parent,
@@ -108,7 +105,6 @@ export default class OseDataModelMonster extends foundry.abstract.TypeDataModel 
       ({ system: { containerId } }) => !containerId
     ).sort((a, b) => a.name.localeCompare(b.name));
   }
-
   get armor() {
     return getItemsOfActorOfType(
       this.parent,
@@ -116,7 +112,6 @@ export default class OseDataModelMonster extends foundry.abstract.TypeDataModel 
       ({ system: { containerId } }) => !containerId
     ).sort((a, b) => a.name.localeCompare(b.name));
   }
-
   get abilities() {
     return getItemsOfActorOfType(
       this.parent,
@@ -124,7 +119,6 @@ export default class OseDataModelMonster extends foundry.abstract.TypeDataModel 
       ({ system: { containerId } }) => !containerId
     ).sort((a, b) => (a.sort || 0) - (b.sort || 0));
   }
-
   get attackPatterns() {
     return [...this.weapons, ...this.abilities]
       .sort((a, b) => {
@@ -142,7 +136,6 @@ export default class OseDataModelMonster extends foundry.abstract.TypeDataModel 
         return { ...updated, [pattern]: [...updated[pattern], curr] };
       }, {});
   }
-
   get #spellList() {
     return getItemsOfActorOfType(
       this.parent,
@@ -150,18 +143,15 @@ export default class OseDataModelMonster extends foundry.abstract.TypeDataModel 
       ({ system: { containerId } }) => !containerId
     );
   }
-
   get isSlow() {
     return this.weapons.length === 0
       ? false
       : this.weapons.every(
-          (item) => !(item.type !== "weapon" || !item.system.slow)
-        );
+        (item) => !(item.type !== "weapon" || !item.system.slow)
+      );
   }
-
   get init() {
     const group = game.settings.get(game.system.id, "initiative") !== "group";
-
     return group ? this.initiative.mod : 0;
   }
 }

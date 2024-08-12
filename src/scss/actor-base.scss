@@ -1,5 +1,4 @@
 @import "./variables.scss";
-
 @keyframes notify {
   from {
     color: black;
@@ -8,7 +7,6 @@
     color: crimson;
   }
 }
-
 .ose.sheet.actor {
   $detailsHeight: 44px;
   .blinking {
@@ -47,7 +45,6 @@
       padding: 0;
     }
   }
-
   /* Header Summary Details */
   .header-details {
     h1 {
@@ -63,7 +60,6 @@
       height: 140px;
     }
   }
-
   .summary {
     flex: 0 0 100%;
     height: $detailsHeight;
@@ -71,7 +67,6 @@
     padding: 0;
     list-style: none;
     border-top: none;
-
     li {
       height: calc(100% - 6px);
       float: left;
@@ -240,11 +235,9 @@
         list-style: none;
         margin: 0;
         padding: 0;
-
         .contained-items {
           padding-left: 30px;
         }
-
         .item-summary {
           display: none;
         }
@@ -282,14 +275,12 @@
           padding: 0px;
           margin-bottom: 0px;
           height: 30px;
-
           .item-image {
             flex-basis: 30px;
             flex-grow: 0;
             background-size: contain;
             background-repeat: no-repeat;
           }
-
           .item-name {
             text-indent: 8px;
             text-align: left;
@@ -324,7 +315,6 @@
             background-image: url("/icons/svg/d20-black.svg") !important;
           }
         }
-
         .consumable-counter {
           height: 14px;
           display: flex;
@@ -415,7 +405,7 @@
         a:hover {
           color: $colorCrimson;
           text-shadow: 0 0 5px $colorFaint, 1px 0 5px $colorFaint,
-            0 1px 5px $colorFaint, 1px 1px 5px $colorFaint;
+          0 1px 5px $colorFaint, 1px 1px 5px $colorFaint;
         }
       }
       &.spells {

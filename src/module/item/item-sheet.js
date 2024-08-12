@@ -2,7 +2,6 @@
  * @file The system-level sheet for items of any type
  */
 import OSE from "../config";
-
 /**
  * Extend the basic ItemSheet with some very simple modifications
  */
@@ -27,15 +26,12 @@ export default class OseItemSheet extends ItemSheet {
       ],
     });
   }
-
   /* -------------------------------------------- */
-
   /** @override */
   get template() {
     const path = `${OSE.systemPath()}/templates/items`;
     return `${path}/${this.item.type}-sheet.html`;
   }
-
   /**
    * Prepare data for rendering the Item sheet
    * The prepared data object contains both the actor data as well as additional sheet options
@@ -57,9 +53,7 @@ export default class OseItemSheet extends ItemSheet {
     };
     return data;
   }
-
   /* -------------------------------------------- */
-
   /**
    * Activate event listeners using the prepared sheet HTML
    *
@@ -80,11 +74,9 @@ export default class OseItemSheet extends ItemSheet {
     html.find("a.melee-toggle").click(() => {
       this.object.update({ "system.melee": !this.object.system.melee });
     });
-
     html.find("a.missile-toggle").click(() => {
       this.object.update({ "system.missile": !this.object.system.missile });
     });
-
     super.activateListeners(html);
   }
 }

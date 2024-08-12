@@ -206,6 +206,8 @@
   "OSE.Setting.damageOriginalTarget": "Original Target",
   "OSE.Setting.InvertedCtrlBehavior": "Invert Roll Ctrl/Meta-key",
   "OSE.Setting.InvertedCtrlBehaviorHint": "Reverses behavior for holding Ctrl/Meta when clicking on a roll.",
+  "OSE.Setting.Dolmenwood": "Dolmenwood",
+  "OSE.Setting.DolmenwoodHint": "Use Dolmenwood rules defaults.",
 
   "OSE.items.Equip": "Equip",
   "OSE.items.Unequip": "Unequip",
@@ -329,5 +331,16 @@
   "OSE.error.noTokenControlled": "You must have one or more controlled Tokens in order to use this option.",
   "OSE.error.noGP": "You need a GP item to use this feature.",
   "OSE.error.unexpectedSettings": "unexpected OSE setting {configName}: {configValue}",
-  "OSE.error.cantDealDamageTo": "Can't deal damage to {nameOrId}"
+  "OSE.error.cantDealDamageTo": "Can't deal damage to {nameOrId}",
+
+  "OSE.dolmenwood.saves.doom.short": "D",
+  "OSE.dolmenwood.saves.doom.long": "Doom",
+  "OSE.dolmenwood.saves.ray.short": "R",
+  "OSE.dolmenwood.saves.ray.long": "Ray",
+  "OSE.dolmenwood.saves.hold.short": "H",
+  "OSE.dolmenwood.saves.hold.long": "Hold",
+  "OSE.dolmenwood.saves.blast.short": "B",
+  "OSE.dolmenwood.saves.blast.long": "Blast",
+  "OSE.dolmenwood.saves.spell.short": "S",
+  "OSE.dolmenwood.saves.spell.long": "Spell"
 }

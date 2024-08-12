@@ -6,9 +6,7 @@ import OseDataModelCharacterEncumbranceComplete from "./actor/data-model-classes
 import OseDataModelCharacterEncumbranceDetailed from "./actor/data-model-classes/data-model-character-encumbrance-detailed";
 import OseDataModelCharacterEncumbranceDisabled from "./actor/data-model-classes/data-model-character-encumbrance-disabled";
 import OseDataModelCharacterEncumbranceItemBased from "./actor/data-model-classes/data-model-character-encumbrance-item-based";
-
 export type OseConfig = typeof OSE;
-
 export type Attribute = keyof OseConfig["scores"];
 export type ExplorationSkill = keyof OseConfig["exploration_skills"];
 export type RollType = keyof OseConfig["roll_type"];
@@ -18,12 +16,11 @@ export type Color = keyof OseConfig["colors"];
 export type InventoryItemTag = keyof OseConfig["tags"];
 export type EncumbranceOption = keyof OseConfig["encumbranceOptions"];
 export type ApplyDamageOption = keyof OseConfig["apply_damage_options"];
-
-export const OSE = {  
+export const OSE = {
   /** Path for system dist */
   systemPath(): string {
     return `${this.systemRoot}/dist`;
-  },  
+  },
   /** Root path for OSE system */
   get systemRoot(): string {
     return `/systems/${game.system.id}`;
@@ -77,16 +74,24 @@ export const OSE = {
     below: "≤",
   },
   saves_short: {
+    doom: "OSE.dolmenwood.saves.doom.short",
     death: "OSE.saves.death.short",
+    ray: "OSE.dolmenwood.saves.ray.short",
     wand: "OSE.saves.wand.short",
+    hold: "OSE.dolmenwood.saves.hold.short",
     paralysis: "OSE.saves.paralysis.short",
+    blast: "OSE.dolmenwood.saves.blast.short",
     breath: "OSE.saves.breath.short",
     spell: "OSE.saves.spell.short",
   },
   saves_long: {
+    doom: "OSE.dolmenwood.saves.doom.long",
     death: "OSE.saves.death.long",
+    ray: "OSE.dolmenwood.saves.ray.long",
     wand: "OSE.saves.wand.long",
+    hold: "OSE.dolmenwood.saves.hold.long",
     paralysis: "OSE.saves.paralysis.long",
+    blast: "OSE.dolmenwood.saves.blast.long",
     breath: "OSE.saves.breath.long",
     spell: "OSE.saves.spell.long",
   },
@@ -97,9 +102,9 @@ export const OSE = {
     shield: "OSE.armor.shield",
   },
   apply_damage_options: {
-    selected : "selected",
-    targeted : "targeted",
-    originalTarget : "originalTarget",
+    selected: "selected",
+    targeted: "targeted",
+    originalTarget: "originalTarget",
   },
   colors: {
     green: "OSE.colors.green",
@@ -324,5 +329,4 @@ export const OSE = {
     22: 5,
   },
 };
-
 export default OSE;

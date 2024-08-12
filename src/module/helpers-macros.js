@@ -5,7 +5,6 @@ import {rollTreasure} from "./helpers-treasure";
 /* -------------------------------------------- */
 /*  Hotbar Macros                               */
 /* -------------------------------------------- */
-
 /**
  * Create a Macro from an Item drop.
  * Get an existing item macro if one exists, otherwise create a new one.
@@ -39,7 +38,6 @@ export async function createOseMacro(data, slot) {
       game.i18n.localize("OSE.warn.macrosOnlyForOwnedItems")
     );
   const { item } = data;
-
   // Create the macro command
   const command = `game.ose.rollItemMacro("${item.name}");`;
   let macro = game.macros.contents.find(
@@ -56,9 +54,7 @@ export async function createOseMacro(data, slot) {
   }
   return game.user.assignHotbarMacro(macro, slot);
 }
-
 /* -------------------------------------------- */
-
 /**
  * Create a Macro from an Item drop.
  * Get an existing item macro if one exists, otherwise create a new one.
@@ -73,11 +69,9 @@ export function rollItemMacro(itemName) {
     return ui.notifications.warn(
       game.i18n.localize("OSE.warn.macrosNoTokenOwnedInScene")
     );
-
   let actor;
   if (speaker.token) actor = game.actors.tokens[speaker.token];
   if (!actor) actor = game.actors.get(speaker.actor);
-
   // Get matching items
   const items = actor ? actor.items.filter((i) => i.name === itemName) : [];
   if (items.length > 1) {
@@ -96,11 +90,9 @@ export function rollItemMacro(itemName) {
     );
   }
   const item = items[0];
-
   // Trigger the item roll
   return item.roll();
 }
-
 /**
  * Roll on a RollTable by uuid if it exists.
  *
@@ -116,7 +108,6 @@ export function rollTableMacro(tableUuId) {
       );
     }
     //
-
     if (table.getFlag(game.system.id, "treasure")) {
       return rollTreasure(table);
     }

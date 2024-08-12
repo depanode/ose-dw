@@ -7,12 +7,10 @@ import EncumbranceBasic from "../data-model-character-encumbrance-basic";
 import EncumbranceComplete from "../data-model-character-encumbrance-complete";
 import EncumbranceDetailed from "../data-model-character-encumbrance-detailed";
 import OseDataModelCharacterMove from "../data-model-character-move";
-
 export const key = "ose.actor.datamodel.character.move";
 export const options = {
   displayName: "OSE: Actor: Data Model: Character Movement",
 };
-
 const createMockItem = (
   type: string,
   weight: number,
@@ -25,7 +23,6 @@ const createMockItem = (
     type,
     system: { ...itemOptions, weight, quantity: { value: quantity } },
   }) as Item;
-
 export default ({ describe, it, expect }: QuenchMethods) => {
   describe("Prevent autocalculation when...", () => {
     it("Autocalculation is off", () => {
@@ -43,13 +40,11 @@ export default ({ describe, it, expect }: QuenchMethods) => {
       expect(move.base).to.equal(OseDataModelCharacterMove.baseMoveRate);
     });
   });
-
   describe("Correctly calculates from Basic Encumbrance", () => {
     it("While unarmored", () => {
       let enc = new EncumbranceBasic();
       let move = new OseDataModelCharacterMove(enc);
       expect(move.base).to.equal(OseDataModelCharacterMove.baseMoveRate);
-
       enc = new EncumbranceBasic(undefined, [
         createMockItem("armor", 100, 1, { type: "unarmored", equipped: true }),
         createMockItem("armor", 100, 1, { type: "light", equipped: false }),
@@ -116,7 +111,6 @@ export default ({ describe, it, expect }: QuenchMethods) => {
       expect(move.overland).to.equal(
         OseDataModelCharacterMove.baseMoveRate / 5
       );
-
       enc = new EncumbranceBasic(undefined, [
         createMockItem("item", EncumbranceBasic.significantTreasure, 1, {
           treasure: true,
@@ -139,19 +133,15 @@ export default ({ describe, it, expect }: QuenchMethods) => {
       const expectedBase = OseDataModelCharacterMove.baseMoveRate;
       const expectedEncounter = expectedBase / 3;
       const expectedOverland = expectedBase / 5;
-
       let enc = new EncumbranceDetailed();
       let move = new OseDataModelCharacterMove(enc);
-
       expect(move.base).to.equal(expectedBase);
       expect(move.encounter).to.equal(expectedEncounter);
       expect(move.overland).to.equal(expectedOverland);
-
       enc = new EncumbranceDetailed(undefined, [
         createMockItem("item", 800, 1),
       ]);
       move = new OseDataModelCharacterMove(enc);
-
       expect(move.base).to.equal(expectedBase);
       expect(move.encounter).to.equal(expectedEncounter);
       expect(move.overland).to.equal(expectedOverland);
@@ -160,7 +150,6 @@ export default ({ describe, it, expect }: QuenchMethods) => {
       const expectedBase = OseDataModelCharacterMove.baseMoveRate;
       const expectedEncounter = expectedBase / 3;
       const expectedOverland = expectedBase / 5;
-
       const enc = new EncumbranceDetailed(undefined, [
         createMockItem(
           "item",
@@ -170,7 +159,6 @@ export default ({ describe, it, expect }: QuenchMethods) => {
         ),
       ]);
       const move = new OseDataModelCharacterMove(enc);
-
       expect(move.base).to.equal(expectedBase);
       expect(move.encounter).to.equal(expectedEncounter)
       expect(move.overland).to.equal(expectedOverland)
@@ -179,7 +167,6 @@ export default ({ describe, it, expect }: QuenchMethods) => {
       const expectedBase = OseDataModelCharacterMove.baseMoveRate;
       const expectedEncounter = expectedBase / 3;
       const expectedOverland = expectedBase / 5;
-
       const enc = new EncumbranceDetailed(undefined, [
         createMockItem(
           "item",
@@ -189,7 +176,6 @@ export default ({ describe, it, expect }: QuenchMethods) => {
         ),
       ]);
       const move = new OseDataModelCharacterMove(enc);
-
       expect(move.base).to.equal(expectedBase);
       expect(move.encounter).to.equal(expectedEncounter)
       expect(move.overland).to.equal(expectedOverland)
@@ -198,12 +184,11 @@ export default ({ describe, it, expect }: QuenchMethods) => {
       const expectedBase = OseDataModelCharacterMove.baseMoveRate * .75;
       const expectedEncounter = expectedBase / 3;
       const expectedOverland = expectedBase / 5;
-      
+
       let enc = new EncumbranceDetailed(undefined, [
         createMockItem('item', OseDataModelCharacterEncumbrance.baseEncumbranceCap * .251, 1, {treasure: true}),
       ]);
       let move = new OseDataModelCharacterMove(enc);
-
       expect(move.base).to.equal(expectedBase);
       expect(move.encounter).to.equal(expectedEncounter)
       expect(move.overland).to.equal(expectedOverland)
@@ -212,12 +197,11 @@ export default ({ describe, it, expect }: QuenchMethods) => {
       const expectedBase = OseDataModelCharacterMove.baseMoveRate * .75;
       const expectedEncounter = expectedBase / 3;
       const expectedOverland = expectedBase / 5;
-      
+
       let enc = new EncumbranceDetailed(undefined, [
         createMockItem('item', OseDataModelCharacterEncumbrance.baseEncumbranceCap * .375, 1, {treasure: true}),
       ]);
       let move = new OseDataModelCharacterMove(enc);
-
       expect(move.base).to.equal(expectedBase);
       expect(move.encounter).to.equal(expectedEncounter)
       expect(move.overland).to.equal(expectedOverland)
@@ -226,12 +210,11 @@ export default ({ describe, it, expect }: QuenchMethods) => {
       const expectedBase = OseDataModelCharacterMove.baseMoveRate * .50;
       const expectedEncounter = expectedBase / 3;
       const expectedOverland = expectedBase / 5;
-      
+
       let enc = new EncumbranceDetailed(undefined, [
         createMockItem('item', OseDataModelCharacterEncumbrance.baseEncumbranceCap * .3751, 1, {treasure: true}),
       ]);
       let move = new OseDataModelCharacterMove(enc);
-
       expect(move.base).to.equal(expectedBase);
       expect(move.encounter).to.equal(expectedEncounter)
       expect(move.overland).to.equal(expectedOverland)
@@ -240,12 +223,11 @@ export default ({ describe, it, expect }: QuenchMethods) => {
       const expectedBase = OseDataModelCharacterMove.baseMoveRate * .50;
       const expectedEncounter = expectedBase / 3;
       const expectedOverland = expectedBase / 5;
-      
+
       let enc = new EncumbranceDetailed(undefined, [
         createMockItem('item', OseDataModelCharacterEncumbrance.baseEncumbranceCap * .5, 1, {treasure: true}),
       ]);
       let move = new OseDataModelCharacterMove(enc);
-
       expect(move.base).to.equal(expectedBase);
       expect(move.encounter).to.equal(expectedEncounter)
       expect(move.overland).to.equal(expectedOverland)
@@ -254,12 +236,11 @@ export default ({ describe, it, expect }: QuenchMethods) => {
       const expectedBase = OseDataModelCharacterMove.baseMoveRate * .25;
       const expectedEncounter = expectedBase / 3;
       const expectedOverland = expectedBase / 5;
-      
+
       let enc = new EncumbranceDetailed(undefined, [
         createMockItem('item', OseDataModelCharacterEncumbrance.baseEncumbranceCap * .501, 1, {treasure: true}),
       ]);
       let move = new OseDataModelCharacterMove(enc);
-
       expect(move.base).to.equal(expectedBase);
       expect(move.encounter).to.equal(expectedEncounter)
       expect(move.overland).to.equal(expectedOverland)
@@ -268,12 +249,11 @@ export default ({ describe, it, expect }: QuenchMethods) => {
       const expectedBase = OseDataModelCharacterMove.baseMoveRate * .25;
       const expectedEncounter = expectedBase / 3;
       const expectedOverland = expectedBase / 5;
-      
+
       let enc = new EncumbranceDetailed(undefined, [
         createMockItem('item', OseDataModelCharacterEncumbrance.baseEncumbranceCap, 1, {treasure: true}),
       ]);
       const move = new OseDataModelCharacterMove(enc);
-
       expect(move.base).to.equal(expectedBase);
       expect(move.encounter).to.equal(expectedEncounter)
       expect(move.overland).to.equal(expectedOverland)
@@ -282,12 +262,11 @@ export default ({ describe, it, expect }: QuenchMethods) => {
       const expectedBase = 0;
       const expectedEncounter = 0;
       const expectedOverland = 0;
-      
+
       let enc = new EncumbranceDetailed(undefined, [
         createMockItem('item', OseDataModelCharacterEncumbrance.baseEncumbranceCap, 1.001, {treasure: true}),
       ]);
       let move = new OseDataModelCharacterMove(enc);
-
       expect(move.base).to.equal(expectedBase);
       expect(move.encounter).to.equal(expectedEncounter)
       expect(move.overland).to.equal(expectedOverland)
@@ -298,10 +277,8 @@ export default ({ describe, it, expect }: QuenchMethods) => {
       const expectedBase = OseDataModelCharacterMove.baseMoveRate;
       const expectedEncounter = expectedBase / 3;
       const expectedOverland = expectedBase / 5;
-
       const enc = new EncumbranceComplete();
       const move = new OseDataModelCharacterMove(enc);
-
       expect(move.base).to.equal(expectedBase);
       expect(move.encounter).to.equal(expectedEncounter);
       expect(move.overland).to.equal(expectedOverland);
@@ -310,12 +287,11 @@ export default ({ describe, it, expect }: QuenchMethods) => {
       const expectedBase = OseDataModelCharacterMove.baseMoveRate;
       const expectedEncounter = expectedBase / 3;
       const expectedOverland = expectedBase / 5;
-      
+
       let enc = new EncumbranceComplete(undefined, [
         createMockItem('item', OseDataModelCharacterEncumbrance.baseEncumbranceCap * .125, 1 ),
       ]);
       let move = new OseDataModelCharacterMove(enc);
-
       expect(move.base).to.equal(expectedBase);
       expect(move.encounter).to.equal(expectedEncounter)
       expect(move.overland).to.equal(expectedOverland)
@@ -324,12 +300,11 @@ export default ({ describe, it, expect }: QuenchMethods) => {
       const expectedBase = OseDataModelCharacterMove.baseMoveRate;
       const expectedEncounter = expectedBase / 3;
       const expectedOverland = expectedBase / 5;
-      
+
       let enc = new EncumbranceComplete(undefined, [
         createMockItem('item', OseDataModelCharacterEncumbrance.baseEncumbranceCap * .25, 1 ),
       ]);
       let move = new OseDataModelCharacterMove(enc);
-
       expect(move.base).to.equal(expectedBase);
       expect(move.encounter).to.equal(expectedEncounter)
       expect(move.overland).to.equal(expectedOverland)
@@ -338,12 +313,11 @@ export default ({ describe, it, expect }: QuenchMethods) => {
       const expectedBase = OseDataModelCharacterMove.baseMoveRate * .75;
       const expectedEncounter = expectedBase / 3;
       const expectedOverland = expectedBase / 5;
-      
+
       let enc = new EncumbranceComplete(undefined, [
         createMockItem('item', OseDataModelCharacterEncumbrance.baseEncumbranceCap * .251, 1 ),
       ]);
       const move = new OseDataModelCharacterMove(enc);
-
       expect(move.base).to.equal(expectedBase);
       expect(move.encounter).to.equal(expectedEncounter)
       expect(move.overland).to.equal(expectedOverland)
@@ -352,12 +326,11 @@ export default ({ describe, it, expect }: QuenchMethods) => {
       const expectedBase = OseDataModelCharacterMove.baseMoveRate * .75;
       const expectedEncounter = expectedBase / 3;
       const expectedOverland = expectedBase / 5;
-      
+
       let enc = new EncumbranceComplete(undefined, [
         createMockItem('item', OseDataModelCharacterEncumbrance.baseEncumbranceCap * .375, 1 ),
       ]);
       const move = new OseDataModelCharacterMove(enc);
-
       expect(move.base).to.equal(expectedBase);
       expect(move.encounter).to.equal(expectedEncounter)
       expect(move.overland).to.equal(expectedOverland)
@@ -366,12 +339,11 @@ export default ({ describe, it, expect }: QuenchMethods) => {
       const expectedBase = OseDataModelCharacterMove.baseMoveRate * .50;
       const expectedEncounter = expectedBase / 3;
       const expectedOverland = expectedBase / 5;
-      
+
       let enc = new EncumbranceComplete(undefined, [
         createMockItem('item', OseDataModelCharacterEncumbrance.baseEncumbranceCap * .3751, 1 ),
       ]);
       let move = new OseDataModelCharacterMove(enc);
-
       expect(move.base).to.equal(expectedBase);
       expect(move.encounter).to.equal(expectedEncounter)
       expect(move.overland).to.equal(expectedOverland)
@@ -380,12 +352,11 @@ export default ({ describe, it, expect }: QuenchMethods) => {
       const expectedBase = OseDataModelCharacterMove.baseMoveRate * .50;
       const expectedEncounter = expectedBase / 3;
       const expectedOverland = expectedBase / 5;
-      
+
       let enc = new EncumbranceComplete(undefined, [
         createMockItem('item', OseDataModelCharacterEncumbrance.baseEncumbranceCap * .5, 1 ),
       ]);
       let move = new OseDataModelCharacterMove(enc);
-
       expect(move.base).to.equal(expectedBase);
       expect(move.encounter).to.equal(expectedEncounter)
       expect(move.overland).to.equal(expectedOverland)
@@ -394,12 +365,11 @@ export default ({ describe, it, expect }: QuenchMethods) => {
       const expectedBase = OseDataModelCharacterMove.baseMoveRate * .25;
       const expectedEncounter = expectedBase / 3;
       const expectedOverland = expectedBase / 5;
-      
+
       let enc = new EncumbranceComplete(undefined, [
         createMockItem('item', OseDataModelCharacterEncumbrance.baseEncumbranceCap * .501, 1 ),
       ]);
       let move = new OseDataModelCharacterMove(enc);
-
       expect(move.base).to.equal(expectedBase);
       expect(move.encounter).to.equal(expectedEncounter)
       expect(move.overland).to.equal(expectedOverland)
@@ -408,12 +378,11 @@ export default ({ describe, it, expect }: QuenchMethods) => {
       const expectedBase = OseDataModelCharacterMove.baseMoveRate * .25;
       const expectedEncounter = expectedBase / 3;
       const expectedOverland = expectedBase / 5;
-      
+
       let enc = new EncumbranceComplete(undefined, [
         createMockItem('item', OseDataModelCharacterEncumbrance.baseEncumbranceCap, 1 ),
       ]);
       let move = new OseDataModelCharacterMove(enc);
-
       expect(move.base).to.equal(expectedBase);
       expect(move.encounter).to.equal(expectedEncounter)
       expect(move.overland).to.equal(expectedOverland)
@@ -422,12 +391,11 @@ export default ({ describe, it, expect }: QuenchMethods) => {
       const expectedBase = 0;
       const expectedEncounter = 0;
       const expectedOverland = 0;
-      
+
       let enc = new EncumbranceComplete(undefined, [
         createMockItem('item', OseDataModelCharacterEncumbrance.baseEncumbranceCap, 1.001 ),
       ]);
       const move = new OseDataModelCharacterMove(enc);
-
       expect(move.base).to.equal(expectedBase);
       expect(move.encounter).to.equal(expectedEncounter);
       expect(move.overland).to.equal(expectedOverland);

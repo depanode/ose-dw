@@ -4,15 +4,12 @@
 // eslint-disable-next-line prettier/prettier, import/no-cycle
 import { QuenchMethods } from "../../../e2e";
 import { cleanUpWorldItems, createWorldTestItem } from "../../../e2e/testUtils";
-
 export const key = "ose.item.sheet";
 export const options = { displayName: "OSE: Item: Sheet" };
-
 export default ({ describe, it, expect, after, assert }: QuenchMethods) => {
   after(() => {
     cleanUpWorldItems();
   });
-
   describe("defaultOptions() ", () => {
     it("Has correctly set defaultOptions", async () => {
       const item = await createWorldTestItem("item");
@@ -38,7 +35,6 @@ export default ({ describe, it, expect, after, assert }: QuenchMethods) => {
       expect(sheet?.options.tabs[0].initial).equal("description");
     });
   });
-
   describe("template()", () => {
     it("Returns html path", async () => {
       const item = await createWorldTestItem("item");
@@ -48,7 +44,6 @@ export default ({ describe, it, expect, after, assert }: QuenchMethods) => {
       expect(sheet?.template).contain("-sheet.html");
     });
   });
-
   describe("getData()", () => {
     it("Returns data", async () => {
       const item = await createWorldTestItem("item");

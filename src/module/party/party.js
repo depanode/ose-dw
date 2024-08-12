@@ -1,7 +1,6 @@
 /**
  * @file Static OseParty methods
  */
-
 const OseParty = {
   /**
    * Returns all characters currently in the Party
@@ -18,5 +17,4 @@ const OseParty = {
     );
   },
 };
-
 export default OseParty;

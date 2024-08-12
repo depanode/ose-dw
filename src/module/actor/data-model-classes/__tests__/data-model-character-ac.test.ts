@@ -3,10 +3,8 @@
  */
 import { QuenchMethods } from "../../../../e2e";
 import OseDataModelCharacterAC from "../data-model-character-ac";
-
 export const key = "ose.actor.datamodel.character.ac";
 export const options = { displayName: "OSE: Actor: Data Model: Character AC" };
-
 export default ({ describe, it, expect }: QuenchMethods) => {
   const armorAC = 4;
   const shieldAC = 2;
@@ -21,7 +19,6 @@ export default ({ describe, it, expect }: QuenchMethods) => {
       equipped: true,
     },
   }) as Item;
-
   // eslint-disable-next-line new-cap
   const shield = new Item.implementation({
     name: "Shield",
@@ -33,17 +30,13 @@ export default ({ describe, it, expect }: QuenchMethods) => {
       equipped: true,
     },
   }) as Item;
-
   const itemsArmor = [armor];
   const itemsShield = [shield] as Item[];
   const itemsBoth = [armor, shield] as Item[];
-
   const positiveDexMod = 3;
   const negativeDexMod = -1;
-
   const positiveArbitraryMod = 2;
   const negativeArbitraryMod = -4;
-
   describe("Naked AC values", () => {
     describe("Returns the default base AC", () => {
       it("When ascending", () => {
@@ -56,7 +49,6 @@ export default ({ describe, it, expect }: QuenchMethods) => {
       });
     });
   });
-
   describe("Armored AC values", () => {
     describe("Returns the expected AC, provided equipment", () => {
       describe("With armor", () => {
@@ -73,7 +65,6 @@ export default ({ describe, it, expect }: QuenchMethods) => {
           expect(ac.value).to.equal(armorAC);
         });
       });
-
       describe("With shield", () => {
         it("When ascending", () => {
           const ac = new OseDataModelCharacterAC(true, itemsShield);
@@ -88,7 +79,6 @@ export default ({ describe, it, expect }: QuenchMethods) => {
           );
         });
       });
-
       describe("With armor and shield", () => {
         it("When ascending", () => {
           const ac = new OseDataModelCharacterAC(true, itemsBoth);
@@ -105,7 +95,6 @@ export default ({ describe, it, expect }: QuenchMethods) => {
       });
     });
   });
-
   describe("With a dexterity modifier", () => {
     describe("Positive modifier", () => {
       describe("When ascending", () => {
@@ -236,7 +225,6 @@ export default ({ describe, it, expect }: QuenchMethods) => {
       });
     });
   });
-
   describe("With an arbitrary modifier", () => {
     describe("Positive modifier", () => {
       describe("When ascending", () => {

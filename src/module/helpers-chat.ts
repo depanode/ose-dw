@@ -2,7 +2,6 @@
  * @file A collection of helper utils for chat cards
  */
 import OseActor from "./actor/entity";
-
 /**
  * Apply rolled dice damage to the token or tokens which are currently controlled.
  * This allows for damage to be scaled by a multiplier to account for healing, critical hits, or resistance
@@ -27,7 +26,6 @@ function applyChatCardDamage(html: JQuery, multiplier: 1 | -1) {
     canvas.tokens?.controlled.forEach((t) => applyDamageToTarget(t.actor, amount, multiplier, t.name));
   }
 }
-
 async function applyDamageToTarget(actor: Actor | null, amount: string, multiplier: 1 | -1, nameOrId: string) {
   if (!game.user?.isGM || !(actor instanceof OseActor)) {
     ui.notifications?.error(game.i18n.format("OSE.error.cantDealDamageTo", { nameOrId }));
@@ -35,10 +33,8 @@ async function applyDamageToTarget(actor: Actor | null, amount: string, multipli
   }
   await actor.applyDamage(amount, multiplier);
 }
-
 const canApply: ContextMenuEntry["condition"] = (li) =>
   canApplyDamage(li) && !!li.find(".dice-roll").length;;
-
 function canApplyDamage(html: JQuery) {
   if (!html.find('.dice-total').length) return false;
   const applyDamageOption = game.settings.get(game.system.id, "applyDamageOption");
@@ -58,7 +54,6 @@ function canApplyDamage(html: JQuery) {
     }
   }
 }
-
 /**
  * This function is used to hook into the Chat Log context menu to add additional options to each message
  * These options make it easy to conveniently apply damage to controlled tokens based on the value of a Roll
@@ -87,9 +82,7 @@ export const addChatMessageContextOptions = (
   );
   return options;
 };
-
 /* -------------------------------------------- */
-
 export const addChatMessageButtons = (msg: ChatMessage, html: JQuery) => {
   // Hide blind rolls
   const blindable = html.find(".blindable");
@@ -118,7 +111,6 @@ export const addChatMessageButtons = (msg: ChatMessage, html: JQuery) => {
     });
   }
 };
-
 export const functionsForTesting = {
   applyChatCardDamage,
 };

@@ -2,7 +2,6 @@
  * @file An application used for setting up roll modifiers
  */
 import OSE from "../config";
-
 export default class OseCharacterModifiers extends FormApplication {
   static get defaultOptions() {
     const options = super.defaultOptions;
@@ -12,9 +11,7 @@ export default class OseCharacterModifiers extends FormApplication {
     options.width = 240;
     return options;
   }
-
   /* -------------------------------------------- */
-
   /**
    * Add the Entity name into the window title
    *
@@ -23,9 +20,7 @@ export default class OseCharacterModifiers extends FormApplication {
   get title() {
     return `${this.object.name}: Modifiers`;
   }
-
   /* -------------------------------------------- */
-
   /**
    * Construct and return the data object used to render the HTML template for this form application.
    *
@@ -36,9 +31,7 @@ export default class OseCharacterModifiers extends FormApplication {
     data.user = game.user;
     return data;
   }
-
   /* -------------------------------------------- */
-
   /** @override */
   activateListeners(html) {
     super.activateListeners(html);

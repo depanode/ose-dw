@@ -2,7 +2,6 @@
  * @file An application used to manage Actor configuration.
  */
 import OSE from "../config";
-
 export default class OseEntityTweaks extends FormApplication {
   static get defaultOptions() {
     const options = super.defaultOptions;
@@ -12,9 +11,7 @@ export default class OseEntityTweaks extends FormApplication {
     options.width = 380;
     return options;
   }
-
   /* -------------------------------------------- */
-
   /**
    * Add the Entity name into the window title
    *
@@ -24,9 +21,7 @@ export default class OseEntityTweaks extends FormApplication {
   get title() {
     return `${this.object.name}: ${game.i18n.localize("OSE.dialog.tweaks")}`;
   }
-
   /* -------------------------------------------- */
-
   /**
    * Construct and return the data object used to render the HTML template for this form application.
    *
@@ -44,14 +39,11 @@ export default class OseEntityTweaks extends FormApplication {
     };
     return data;
   }
-
   /* -------------------------------------------- */
-
   /** @override */
   activateListeners(html) {
     super.activateListeners(html);
   }
-
   /**
    * This method is called upon form submission after form data is validated
    *
