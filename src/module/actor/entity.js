@@ -1,6 +1,8 @@
 import OseItem from "../item/entity";
+
 import skipRollDialogCheck from "../helpers-behaviour";
 import OseDice from "../helpers-dice";
+
 /**
  * Used in the rollAttack function to remove zeroes from rollParts arrays
  *
@@ -9,10 +11,12 @@ import OseDice from "../helpers-dice";
  */
 const removeFalsyElements = (arr) =>
   arr.reduce((a, b) => (b ? [...a, b] : a), []);
+
 export default class OseActor extends Actor {
   prepareDerivedData() {
     if (game.version.startsWith("10")) this.system.prepareDerivedData?.();
   }
+
   static migrateData(source) {
     // Fixing missing img
     if (source?.img === "") {
@@ -26,8 +30,10 @@ export default class OseActor extends Actor {
       source.system.details.movement = source.system.movement.value;
       delete source.system.movement.value;
     }
+
     return source;
   }
+
   async update(data, options = {}) {
     const newData = { ...data };
     const {
@@ -37,19 +43,22 @@ export default class OseActor extends Actor {
       "system.thac0.value": thac0Value,
     } = newData;
     // Compute AAC from AC
-    if (acValue) {
+    if (acValue !== undefined) {
       newData["system.aac.value"] = 19 - acValue;
-    } else if (aacValue) {
+    } else if (aacValue !== undefined) {
       newData["system.ac.value"] = 19 - aacValue;
     }
+
     // Compute Thac0 from BBA
-    if (thac0Value) {
+    if (thac0Value !== undefined) {
       newData["system.thac0.bba"] = 19 - thac0Value;
-    } else if (bbaValue) {
+    } else if (bbaValue !== undefined) {
       newData["system.thac0.value"] = 19 - bbaValue;
     }
+
     super.update(newData, options);
   }
+
   async createEmbeddedDocuments(embeddedName, data = [], context = {}) {
     data.map((item) => {
       if (item.img === undefined) {
@@ -58,6 +67,7 @@ export default class OseActor extends Actor {
     });
     return super.createEmbeddedDocuments(embeddedName, data, context);
   }
+
   /* -------------------------------------------- */
   /*  Socket Listeners and Handlers
     /* -------------------------------------------- */

@@ -5,6 +5,7 @@
 import OseDataModelCharacterEncumbranceDisabled from "./data-model-classes/data-model-character-encumbrance-disabled";
 import OseDataModelCharacterSpells from "./data-model-classes/data-model-character-spells";
 import OseDataModelCharacterMove from "./data-model-classes/data-model-character-move";
+
 const getItemsOfActorOfType = (actor, filterType, filterFn = null) =>
   actor.items
     .filter(({ type }) => type === filterType)
@@ -20,10 +21,36 @@ export default class OseDataModelMonster extends foundry.abstract.TypeDataModel 
       this.movement.base
     );
   }
+
+  /**
+   * @inheritdoc
+   */
+  static migrateData(source) {
+    this.#migrateMonsterLanguages(source);
+
+    return super.migrateData(source);
+  }
+
+  /**
+   * Use an empty array for system.languages.value
+   * in order to suppress Polyglot errors.
+   *
+   * @param {OseDataModelMonster} source - Source data to migrate
+   */
+  static #migrateMonsterLanguages(source) {
+    const languages = source.languages ?? {};
+
+    // If languages.value isn't an iterable, use an empty array
+    if (typeof languages?.value?.[Symbol.iterator] !== "function") {
+      languages.value = [];
+    }
+  }
+
   // @todo define schema options; stuff like min/max values and so on.
   static defineSchema() {
     const { StringField, NumberField, BooleanField, ObjectField, SchemaField } =
       foundry.data.fields;
+
     return {
       spells: new ObjectField(),
       details: new ObjectField(),

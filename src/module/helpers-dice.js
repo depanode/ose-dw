@@ -200,7 +200,7 @@ const OseDice = {
     const targetAac = data.roll.target ? targetActorData.aac.value : -20;
     result.victim = data.roll.target || null;
     if (game.settings.get(game.system.id, "ascendingAC")) {
-      const attackBonus = 19 - data.roll.thac0;
+      const attackBonus = 0;
       if (this.attackIsSuccess(roll, targetAac, attackBonus)) {
         result.details = game.i18n.format(
           "OSE.messages.AttackAscendingSuccess",
