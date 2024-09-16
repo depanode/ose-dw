@@ -497,7 +497,7 @@ export default class OseActor extends Actor {
     const { value, max } = this.system.hp;
     // Update the Actor
     return this.update({
-      "system.hp.value": Math.clamped(value - amount, 0, max),
+      "system.hp.value": Math.clamp(value - amount, 0, max),
     });
   }
 }

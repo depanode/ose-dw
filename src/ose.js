@@ -28,6 +28,10 @@ import * as renderList from "./module/renderList";
 import registerSettings from "./module/settings";
 import * as treasure from "./module/helpers-treasure";
 import "./e2e";
+
+import polyfill from "./module/polyfill";
+
+polyfill();
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
 /* -------------------------------------------- */
@@ -65,7 +69,19 @@ Hooks.once("init", async () => {
     character: OseDataModelCharacter,
     monster: OseDataModelMonster,
   };
+  CONFIG.Actor.dataModels = {
+    character: OseDataModelCharacter,
+    monster: OseDataModelMonster,
+  };
   CONFIG.Item.systemDataModels = {
+    weapon: OseDataModelWeapon,
+    armor: OseDataModelArmor,
+    item: OseDataModelItem,
+    spell: OseDataModelSpell,
+    ability: OseDataModelAbility,
+    container: OseDataModelContainer,
+  };
+  CONFIG.Item.dataModels = {
     weapon: OseDataModelWeapon,
     armor: OseDataModelArmor,
     item: OseDataModelItem,

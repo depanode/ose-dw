@@ -28,7 +28,11 @@ const OseDice = {
       parts.push(form.bonus.value);
     }
     // ;
-    const roll = new Roll(parts.join("+"), data).evaluate({ async: false });
+    // const roll = new Roll(parts.join("+"), data).evaluate({ async: false });
+    const roll = new Roll(parts.join("+"), data);
+    await roll.evaluate({allowStrings: true});
+
+
     // Convert the roll to a chat message and return the roll
     let rollMode = game.settings.get("core", "rollMode");
     rollMode = form ? form.rollMode.value : rollMode;
@@ -216,7 +220,7 @@ const OseDice = {
       }
     } else if (this.attackIsSuccess(roll, result.target, targetAc)) {
       // Answer is bounded betweewn AC -3 and 9 (unarmored) and is shown in chat card
-      const value = Math.clamped(result.target - roll.total, -3, 9);
+      const value = Math.clamp(result.target - roll.total, -3, 9);
       result.details = game.i18n.format("OSE.messages.AttackSuccess", {
         result: value,
         bonus: result.target,
@@ -280,10 +284,16 @@ const OseDice = {
     };
     // Optionally include a situational bonus
     if (form !== null && form.bonus.value) parts.push(form.bonus.value);
-    const roll = new Roll(parts.join("+"), data).evaluate({ async: false });
-    const dmgRoll = new Roll(data.roll.dmg.join("+"), data).evaluate({
+    // const roll = new Roll(parts.join("+"), data).evaluate({ async: false });
+    const roll = new Roll(parts.join("+"), data);
+    await roll.evaluate({allowStrings: true});
+
+    /*const dmgRoll = new Roll(data.roll.dmg.join("+"), data).evaluate({
       async: false,
-    });
+    });*/
+    const dmgRoll = new Roll(data.roll.dmg.join("+"), data);
+    await dmgRoll.evaluate({allowStrings: true});
+
     // Convert the roll to a chat message and return the roll
     let rollMode = game.settings.get("core", "rollMode");
     rollMode = form ? form.rollMode.value : rollMode;

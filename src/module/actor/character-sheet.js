@@ -6,6 +6,7 @@ import OseCharacterCreator from "../dialog/character-creation";
 import OseCharacterGpCost from "../dialog/character-gp-cost";
 import OseCharacterModifiers from "../dialog/character-modifiers";
 import OseActorSheet from "./actor-sheet";
+
 export default class OseActorSheetCharacter extends OseActorSheet {
   /**
    * Extend and override the default options used by the 5e Actor Sheet
@@ -29,6 +30,7 @@ export default class OseActorSheetCharacter extends OseActorSheet {
       scrollY: [".inventory"],
     });
   }
+
   /**
    * Organize and classify Owned Items for Character sheets
    *
@@ -44,16 +46,19 @@ export default class OseActorSheetCharacter extends OseActorSheet {
       treasures: this.actor.system.treasures,
       containers: this.actor.system.containers,
     };
+    data.treasure = this.actor.system.carriedTreasure;
     data.containers = this.actor.system.containers;
     data.abilities = this.actor.system.abilities;
     data.spells = this.actor.system.spells.spellList;
     data.slots = this.actor.system.spellSlots;
+
     // These values are getters that aren't getting
     // cloned when `this.actor.system` is cloned
     data.system.usesAscendingAC = this.actor.system.usesAscendingAC;
     data.system.meleeMod = this.actor.system.meleeMod;
     data.system.rangedMod = this.actor.system.rangedMod;
     data.system.init = this.actor.system.init;
+
     // Sort by sort order (see ActorSheet)
     [
       ...Object.values(data.owned),
@@ -61,20 +66,24 @@ export default class OseActorSheetCharacter extends OseActorSheet {
       data.abilities,
     ].forEach((o) => o.sort((a, b) => (a.sort || 0) - (b.sort || 0)));
   }
+
   generateScores() {
     new OseCharacterCreator(this.actor, {
       top: this.position.top + 40,
       left: this.position.left + (this.position.width - 400) / 2,
     }).render(true);
   }
+
   /**
    * Prepare data for rendering the Actor sheet
    * The prepared data object contains both the actor data as well as additional sheet options
    */
   async getData() {
     const data = super.getData();
+    
     // Prepare owned items
     this._prepareItems(data);
+
     data.enrichedBiography = await TextEditor.enrichHTML(
       this.object.system.details.biography,
       { async: true }
@@ -85,8 +94,10 @@ export default class OseActorSheetCharacter extends OseActorSheet {
     );
     return data;
   }
+
   async _chooseLang() {
     const choices = CONFIG.OSE.languages;
+
     const templateData = { choices };
     const dlg = await renderTemplate(
       `${OSE.systemPath()}/templates/actors/dialogs/lang-create.html`,
@@ -116,6 +127,7 @@ export default class OseActorSheetCharacter extends OseActorSheet {
       }).render(true);
     });
   }
+
   _pushLang(table) {
     const data = this.actor.system;
     let update = data[table]; // V10 compatibility
@@ -126,11 +138,13 @@ export default class OseActorSheetCharacter extends OseActorSheet {
       } else {
         update = { value: [name] };
       }
+
       const newData = {};
       newData[table] = update;
       return this.actor.update({ system: newData });
     });
   }
+
   _popLang(table, lang) {
     const data = this.actor.system;
     const update = data[table].value.filter((el) => el != lang);
@@ -138,7 +152,9 @@ export default class OseActorSheetCharacter extends OseActorSheet {
     newData[table] = { value: update };
     return this.actor.update({ system: newData });
   }
+
   /* -------------------------------------------- */
+
   _onShowModifiers(event) {
     event.preventDefault();
     new OseCharacterModifiers(this.actor, {
@@ -146,6 +162,7 @@ export default class OseActorSheetCharacter extends OseActorSheet {
       left: this.position.left + (this.position.width - 400) / 2,
     }).render(true);
   }
+
   async _onShowGpCost(event, preparedData) {
     event.preventDefault();
     new OseCharacterGpCost(this.actor, preparedData, {
@@ -153,6 +170,7 @@ export default class OseActorSheetCharacter extends OseActorSheet {
       left: this.position.left + (this.position.width - 400) / 2,
     }).render(true);
   }
+
   async _onShowItemTooltip(event) {
     const templateData = {};
     const dlg = await renderTemplate(
@@ -161,6 +179,7 @@ export default class OseActorSheetCharacter extends OseActorSheet {
     );
     document.querySelector(".game").append(dlg);
   }
+
   /**
    * Activate event listeners using the prepared sheet HTML
    *
@@ -168,6 +187,7 @@ export default class OseActorSheetCharacter extends OseActorSheet {
    */
   activateListeners(html) {
     super.activateListeners(html);
+
     html.find(".ability-score .attribute-name a").click((ev) => {
       const actorObject = this.actor;
       const element = ev.currentTarget;
@@ -179,20 +199,25 @@ export default class OseActorSheetCharacter extends OseActorSheet {
         actorObject.rollLoyalty(score, { event: ev });
       }
     });
+
     html.find(".exploration .attribute-name a").click((ev) => {
       const actorObject = this.actor;
       const element = ev.currentTarget;
       const expl = element.parentElement.parentElement.dataset.exploration;
       actorObject.rollExploration(expl, { event: ev });
     });
+
     html.find("a[data-action='modifiers']").click((ev) => {
       this._onShowModifiers(ev);
     });
+
     html.find("a[data-action='gp-cost']").click((ev) => {
       this._onShowGpCost(ev, this.getData());
     });
+
     // Everything below here is only needed if the sheet is editable
     if (!this.options.editable) return;
+
     // Language Management
     html.find(".item-push").click((ev) => {
       ev.preventDefault();
@@ -200,12 +225,14 @@ export default class OseActorSheetCharacter extends OseActorSheet {
       const table = header.dataset.array;
       this._pushLang(table);
     });
+
     html.find(".item-pop").click((ev) => {
       ev.preventDefault();
       const header = ev.currentTarget;
       const table = header.dataset.array;
       this._popLang(table, $(ev.currentTarget).closest(".item").data("lang"));
     });
+
     // Toggle Equipment
     html.find(".item-toggle").click(async (ev) => {
       const li = $(ev.currentTarget).parents(".item");
@@ -215,7 +242,9 @@ export default class OseActorSheetCharacter extends OseActorSheet {
           equipped: !item.system.equipped,
         },
       });
+
     });
+
     html.find("a[data-action='generate-scores']").click((ev) => {
       this.generateScores(ev);
     });

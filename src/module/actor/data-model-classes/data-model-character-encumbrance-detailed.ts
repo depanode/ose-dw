@@ -26,7 +26,7 @@ export default class OseDataModelCharacterEncumbranceDetailed
   /**
    * The weight (in coins) to add to the total weight value if the character has adventuring gear
    */
-  static gearWeight = 80;
+  static gearWeight = 100;
   #weight = 0;
   #hasAdventuringGear;
   constructor(

@@ -1,7 +1,8 @@
 /**
  * @file The data model for Items of type Ability
  */
-export default class OseDataModelAbility extends foundry.abstract.DataModel {
+// export default class OseDataModelAbility extends foundry.abstract.DataModel {
+export default class OseDataModelAbility extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     const { StringField, NumberField, BooleanField, ArrayField, ObjectField } =
       foundry.data.fields;
