@@ -2,6 +2,7 @@
  * @file A file that manages preloading our system templates
  */
 import OSE from "./config";
+
 const preloadHandlebarsTemplates = async () => {
   const templatePaths = [
     // Character Sheets
@@ -22,6 +23,11 @@ const preloadHandlebarsTemplates = async () => {
     // Party Sheet
     `${OSE.systemPath()}/templates/apps/party-sheet.html`,
     // `${OSE.systemPath()}/templates/apps/party-xp.html`,
+    // Combat Tab
+    `${OSE.systemPath()}/templates/sidebar/combat-tracker.hbs`,
+    `${OSE.systemPath()}/templates/sidebar/combat-tracker-combatant-individual.hbs`,
+    `${OSE.systemPath()}/templates/sidebar/combat-tracker-combatant-group.hbs`,
+    `${OSE.systemPath()}/templates/apps/combat-set-groups.hbs`,
   ];
   return loadTemplates(templatePaths);
 };

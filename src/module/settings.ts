@@ -20,6 +20,7 @@ const registerSettings = () => {
     default: "group",
     scope: "world",
     type: String,
+    requiresReload: true,
     config: true,
     choices: {
       individual: "OSE.Setting.InitiativeIndividual",
