@@ -5,6 +5,7 @@ import OseDataModelCharacterAC from "./data-model-classes/data-model-character-a
 import OseDataModelCharacterMove from "./data-model-classes/data-model-character-move";
 import OseDataModelCharacterScores from "./data-model-classes/data-model-character-scores";
 import OseDataModelCharacterSpells from "./data-model-classes/data-model-character-spells";
+
 const getItemsOfActorOfType = (actor, filterType, filterFn = null) =>
   actor.items
     .filter(({ type }) => type === filterType)
@@ -102,12 +103,14 @@ export default class OseDataModelCharacter extends foundry.abstract.TypeDataMode
       }),
     };
   }
+
   // @todo This only needs to be public until
   //       we can ditch sharing out AC/AAC.
   // eslint-disable-next-line class-methods-use-this
   get usesAscendingAC() {
     return game.settings.get(game.system.id, "ascendingAC");
   }
+
   get meleeMod() {
     const ascendingAcMod = this.usesAscendingAC ? this.thac0.bba || 0 : 0;
     return (
@@ -116,6 +119,7 @@ export default class OseDataModelCharacter extends foundry.abstract.TypeDataMode
       ascendingAcMod
     );
   }
+
   get rangedMod() {
     const ascendingAcMod = this.usesAscendingAC ? this.thac0.bba || 0 : 0;
     return (
@@ -124,6 +128,7 @@ export default class OseDataModelCharacter extends foundry.abstract.TypeDataMode
       ascendingAcMod
     );
   }
+
   get isNew() {
     const { str, int, wis, dex, con, cha } = this.scores;
     return ![str, int, wis, dex, con, cha].reduce(
@@ -131,6 +136,7 @@ export default class OseDataModelCharacter extends foundry.abstract.TypeDataMode
       0
     );
   }
+
   get containers() {
     return getItemsOfActorOfType(
       this.parent,
@@ -138,6 +144,7 @@ export default class OseDataModelCharacter extends foundry.abstract.TypeDataMode
       ({ system: { containerId } }) => !containerId
     );
   }
+
   get treasures() {
     return getItemsOfActorOfType(
       this.parent,
@@ -145,6 +152,7 @@ export default class OseDataModelCharacter extends foundry.abstract.TypeDataMode
       ({ system: { treasure, containerId } }) => treasure && !containerId
     );
   }
+
   get carriedTreasure() {
     const total = this.treasures.reduce(
       (acc, { system: { quantity, cost } }) => acc + quantity.value * cost,
@@ -152,6 +160,7 @@ export default class OseDataModelCharacter extends foundry.abstract.TypeDataMode
     );
     return Math.round(total * 100) / 100;
   }
+
   get items() {
     return getItemsOfActorOfType(
       this.parent,
@@ -159,6 +168,7 @@ export default class OseDataModelCharacter extends foundry.abstract.TypeDataMode
       ({ system: { treasure, containerId } }) => !treasure && !containerId
     );
   }
+
   get weapons() {
     return getItemsOfActorOfType(
       this.parent,
@@ -166,6 +176,7 @@ export default class OseDataModelCharacter extends foundry.abstract.TypeDataMode
       ({ system: { containerId } }) => !containerId
     );
   }
+
   get armor() {
     return getItemsOfActorOfType(
       this.parent,
@@ -173,6 +184,7 @@ export default class OseDataModelCharacter extends foundry.abstract.TypeDataMode
       ({ system: { containerId } }) => !containerId
     );
   }
+
   get abilities() {
     return getItemsOfActorOfType(
       this.parent,
@@ -180,6 +192,7 @@ export default class OseDataModelCharacter extends foundry.abstract.TypeDataMode
       ({ system: { containerId } }) => !containerId
     ).sort((a, b) => (a.sort || 0) - (b.sort || 0));
   }
+
   get #spellList() {
     return getItemsOfActorOfType(
       this.parent,
@@ -187,10 +200,11 @@ export default class OseDataModelCharacter extends foundry.abstract.TypeDataMode
       ({ system: { containerId } }) => !containerId
     );
   }
+
   get isSlow() {
     return this.weapons.length === 0
       ? false
-      : this.weapons.every(
+      : this.weapons.some(
         (item) =>
           !(
             item.type !== "weapon" ||
@@ -199,6 +213,7 @@ export default class OseDataModelCharacter extends foundry.abstract.TypeDataMode
           )
       );
   }
+
   // @todo How to test this?
   get init() {
     const group = game.settings.get(game.system.id, "initiative") !== "group";

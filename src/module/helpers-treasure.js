@@ -68,29 +68,13 @@ async function drawTreasure(table, data) {
   };
   data.treasure = {};
   if (table.getFlag(game.system.id, "treasure")) {
-    /*table.results.forEach(async (r) => {
-      if (await percent(r.weight)) {
-        const text = r.getChatText(r);
-        data.treasure[r.id] = {
-          img: r.img,
-          text: TextEditor.enrichHTML(text, { async: false }),
-        };
-        if (
-          r.type === CONST.TABLE_RESULT_TYPES.DOCUMENT &&
-          r.collection === "RollTable"
-        ) {
-          const embeddedTable = game.tables.get(r.resultId);
-          await drawTreasure(embeddedTable, data.treasure[r.id]);
-        }
-      }
-    });*/
 
     for(let r of table.results) {
       if (await percent(r.weight)) {
         const text = r.getChatText(r);
         data.treasure[r.id] = {
           img: r.img,
-          text: await TextEditor.enrichHTML(text),
+          text: await TextEditor.enrichHTML(text, { async: true }),
         };
         if (
           r.type === CONST.TABLE_RESULT_TYPES.DOCUMENT &&
@@ -136,6 +120,7 @@ export async function rollTreasure(table, options = {}) {
     });
   }
 
+  await new Promise(resolve => requestAnimationFrame(resolve));
   const html = await renderTemplate(
     `${OSE.systemPath()}/templates/chat/roll-treasure.html`,
     templateData
